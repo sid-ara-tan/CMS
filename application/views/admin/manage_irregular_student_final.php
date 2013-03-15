@@ -59,7 +59,7 @@
                             <input type="hidden" name="task" value="assign"/>
                            <tr>
                                 <td>Unassigned</td>
-                                <td><h1>Do you want to assign this course to this student?</h1>></td>
+                                <td><h1>Do you want to assign this course to this student?</h1></td>
                             </tr>
                             <tr>
                                 <td></td>

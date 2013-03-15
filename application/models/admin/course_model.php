@@ -295,14 +295,26 @@
 
     //added by arafat
     function assign_student_list_to_course($S_Id,$courseno,$sec){
-
-        $config=array(
-            'CourseNo'=>$courseno,
-            'S_Id'=>$S_Id,
-            'Section'=>$sec,
-            'Status'=>'Running'
-        );
-        return $this->db->insert('takencourse',$config);
+        $this->db->where('S_Id',$S_Id);
+        $this->db->where('CourseNo',$courseno);
+        $query=$this->db->get('takencourse');
+        if($query->num_rows()==0){
+            $config=array(
+                'CourseNo'=>$courseno,
+                'S_Id'=>$S_Id,
+                'Section'=>$sec,
+                'Status'=>'Running'
+            );
+            return $this->db->insert('takencourse',$config);
+        }else{
+            $config=array(
+                'Section'=>$sec,
+                'Status'=>'Running'
+            );
+            $this->db->where('S_Id',$S_Id);
+            $this->db->where('CourseNo',$courseno);            
+            return $this->db->update('takencourse',$config);
+        }
     }
 
     function delete_student_list_from_course($student,$courseno){
