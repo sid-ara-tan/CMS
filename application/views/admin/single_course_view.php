@@ -1,10 +1,15 @@
 <script type="text/javascript" charset="utf-8">
        $(document).ready(function() {
+           jQuery.validator.addMethod("alphanumeric", function(value, element) {
+                    return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
+            },"only alphanumeric(no space) ");
+
             $("#formAddNewRow").validate({
                     rules:  {
                         CourseNo:    {
                                         required: true,
                                         maxlength: 9,
+                                        alphanumeric:true,
                                         remote: {
                                                     url:"<?php echo site_url('admin/course/form_is_unique_course_no');?>",
                                                     type:"post"
