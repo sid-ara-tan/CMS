@@ -139,7 +139,7 @@ echo validation_errors();
 
     <?php
     $examInfo=$this->exam->get_exam_by_ID($courseno,$sec,$exam_ID);
-    echo "<h2>Marks of ".$examInfo->eType."-".$examInfo->Topic." (".$examInfo->eDate.")</h2>";
+    echo "<h2>Marks of ".$examInfo->etypename."-".$examInfo->Topic." (".$examInfo->eDate.")</h2>";
 
     echo "<input type='hidden' id='examID_hidden' name='examID_hidden' value='$exam_ID' />";
     $rows=$this->student->get_studentformarks($courseno,$sec);

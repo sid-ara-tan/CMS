@@ -163,7 +163,7 @@
                         }else{
                             $this->table->set_heading('Section','Exam No','Type','Date','Time','Duration','Location','Action');
                             foreach ($rows as $row) {
-                                $etypename=$this->exam->get_etypename($courseno,$row->eType);
+                                $etypename=$row->etypename;
                                 if($T_ID==$row->Scheduler_ID && $this->exam->total_marks($courseno,$row->Sec,$row->ID)==0){
                                     $this->table->add_row($row->Sec,$row->Topic,$etypename,$row->eDate,$row->eTime,$row->Duration,$row->Location,
                                             anchor('teacher_home/edit_exam/edit/'.$courseno.'/'.$row->Sec.'/'.$row->ID,'Edit'));

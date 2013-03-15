@@ -87,8 +87,8 @@
                         <td><?php echo $row->CourseNo;?></td>
                         <td><?php echo $row->Sec;?></td>
                         <td><?php echo $row->eDate;?></td>
-                        <td><?php echo $row->eTime; ?></td><?php $etypename=$this->exam->get_etypename($row->CourseNo,$row->eType);?>
-                        <td><?php echo $etypename;?></td>
+                        <td><?php echo $row->eTime; ?></td>
+                        <td><?php echo $row->etypename;?></td>
                         <td><?php 
                                 if($this->exam->total_marks($row->CourseNo,$row->Sec,$row->ID)>0)
                                         echo 'Yes';

@@ -128,7 +128,7 @@
         $exam_ID=$rows[0]->ID;
         $total_marks=$this->exam->total_marks($courseno,$sec,$exam_ID);
         foreach ($rows as $row) {
-            $options[$row->ID]=$row->eType.'('.$row->eDate.'):'.$row->Topic;
+            $options[$row->ID]=$row->etypename.'('.$row->eDate.'):'.$row->Topic;
         }
     }else{
         $options['noexam']='No exam available';
@@ -160,7 +160,7 @@
 
     <?php
     $examInfo=$this->exam->get_exam_by_ID($courseno,$sec,$exam_ID);
-    echo "<h2>Marks of ".$examInfo->eType."-".$examInfo->Topic." (".$examInfo->eDate.")</h2>";
+    echo "<h2>Marks of ".$examInfo->etypename."-".$examInfo->Topic." (".$examInfo->eDate.")</h2>";
     
     echo "<input type='hidden' id='examID_hidden' name='examID_hidden' value='$exam_ID' />";
     $rows=$this->student->get_studentformarks($courseno,$sec);

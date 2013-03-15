@@ -26,6 +26,9 @@ class Exam extends CI_Model{
         $date.=substr($unparsed_date, 0, 2);
         $date.='-';
         $date.=substr($unparsed_date, 3, 2);
+
+        $etype=$this->input->post('Type');
+        $etypename=$this->get_etypename($courseno,$etype);
         $data=array(
             'CourseNo'=>$courseno,
             'ID'=>$id,
@@ -37,7 +40,8 @@ class Exam extends CI_Model{
             'eDate'=>$date,
             'eTime'=>$time,
             'Scheduler_ID'=>$T_ID,
-            'eType'=>$this->input->post('Type')
+            'eType'=>$etype,
+            'etypename'=>$etypename
         );
         
         $this->db->insert('exam',$data);
@@ -90,7 +94,7 @@ class Exam extends CI_Model{
     
     function  get_routine($courseno){
         $query=$this->db->query("
-            select Sec,eDate,eTime,eType,Duration,Location,Topic,Syllabus,Scheduler_ID,ID
+            select *
             from exam
             where CourseNo='$courseno'
             ");
@@ -106,7 +110,7 @@ class Exam extends CI_Model{
 
     function get_exam($courseno,$sec){
         $query=$this->db->query("
-            select Topic,ID,eDate,eType,eTime,Percentage
+            select Topic,ID,eDate,eType,eTime,Percentage,etypename
             from exam
             where CourseNo='$courseno' and Sec='$sec'
             ");
@@ -121,7 +125,7 @@ class Exam extends CI_Model{
 
     function get_exam_by_ID($courseno,$sec,$examID){
         $query=$this->db->query("
-            select Topic,ID,eDate,eType,eTime
+            select Topic,ID,eDate,eType,eTime,etypename
             from exam
             where CourseNo='$courseno' and Sec='$sec' and ID='$examID'
             ");
