@@ -368,6 +368,12 @@ class Teacher_home extends CI_controller{
         $config['max_filename']='28';
         $this->load->library('upload', $config);
 
+        //create folder
+        if(!is_dir('./uploads/' . $courseno))
+        {
+        mkdir('./uploads/' . $courseno,0777);
+        }
+        
         if (!$this->upload->do_upload("somefile")){
                 $message =$this->upload->display_errors();
                 $this->session->set_flashdata('content_message', $message);
