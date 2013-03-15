@@ -1,0 +1,6 @@
+https://github.com/sid-ara-tan/GitCi.git
+
+Up:2
+Down:2
+
+192.168.20.254:hello
