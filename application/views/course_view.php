@@ -251,14 +251,14 @@
                 <label for="Sec"><small>Section</small></label><br/>
                 <?php
                     $query=$this->db->query("
-                        SELECT etype
+                        SELECT etype,etypename
                         FROM exam_type
                         WHERE CourseNo='$courseno'
                         ");
                     $options=array();
                     if($query->num_rows()>0){
                         foreach($query->result() as $row ){
-                            $options[$row->etype]=$row->etype;
+                            $options[$row->etype]=$row->etypename;
                         }
 
                     }
@@ -377,7 +377,7 @@
                     foreach ($rows as $row) {
                         $exam_array[]=$row->etype;
                         $str="div".$row->etype;
-                        echo '<li><b><span onclick="showdiv(\''.$str.'\');">'.$row->etype.'</span></b>';
+                        echo '<li><b><span onclick="showdiv(\''.$str.'\');">'.$row->etypename.'</span></b>';
                         if($this->exam->is_scheduled($courseno,$row->etype)==FALSE)
                                 echo anchor('teacher_home/delete_exam/'.$courseno.'/'.$row->etype,
                                         '   [Delete]','onclick=" return check()"');
@@ -419,7 +419,7 @@
                     if($rows!=FALSE){
                         $data=array();
                         foreach ($rows as $row) {
-                            $data[$row->etype]=$row->etype;
+                            $data[$row->etype]=$row->etypename;
                         }
                         echo form_dropdown('etype', $data,'','id="etype"');
 

@@ -8,7 +8,8 @@ $(document).ready(function() {
 $sec=$this->input->post('Sec');
 $courseno=$this->input->post('CourseNo');
 $etype=$this->input->post('etype');
-echo "<hr />Type:<b>    $etype</b><br/>";
+$etypename=$this->exam->get_etypename($courseno,$etype);
+echo "<hr />Type:<b>    $etypename</b><br/>";
 echo "Section:<b> $sec</b><hr />";
 $Marks_Type=$this->exam->get_Marks_Type($courseno,$etype);
 if($Marks_Type=='Percentage'){

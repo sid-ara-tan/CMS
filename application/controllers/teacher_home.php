@@ -31,6 +31,7 @@ class Teacher_home extends CI_controller{
     }
 
     function edit_exam($task,$courseno,$sec,$id){
+        $this->load->model('exam');
         $data['task']=$task;
         $data['courseno']=$courseno;
         $data['sec']=$sec;
@@ -312,6 +313,7 @@ class Teacher_home extends CI_controller{
       $this->load->model('Exam');
       $this->load->library('form_validation');
       $etype=$this->input->post('exam_type');
+      $etypename=$this->input->post('exam_type');
       $etype=str_replace(" ","_",$etype);
       $_POST['exam_type']=$etype;
       $this->form_validation->set_rules('exam_type','Exam Type','callback_exam_type_uniqness['.$courseno.']');
@@ -320,7 +322,7 @@ class Teacher_home extends CI_controller{
           $this->session->set_flashdata('addexam_message',$message);
           redirect('teacher_home/class_content/'.$courseno);
       }else{
-          $this->Exam->add_exam($courseno);
+          $this->Exam->add_exam($courseno,$etypename);
           $this->session->set_flashdata('addexam_message', 'Exam added Succesfully');
           redirect('teacher_home/class_content/'.$courseno);
       }
