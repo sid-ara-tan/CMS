@@ -110,6 +110,7 @@ $row_std = $query_student_info->row();
                     }
                     else
                         echo 'no data available';
+                        echo br(15);
                     ?>
                 </ul>
             </div>

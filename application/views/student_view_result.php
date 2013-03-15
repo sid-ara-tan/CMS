@@ -121,6 +121,7 @@ $row_std = $query_student_info->row();
                                     <p>
                                         <span class='ui-icon ui-icon-circle-check' style='float:left; margin:0 7px 50px 0;'></span>
                                         Select An option To See Grade Sheet..
+                                        <?php echo br(15);?>
 
                                     </p>
                             </div>

@@ -15,10 +15,7 @@
 <div id="login_div_size">
     <div id="login_form">
         <h2>Login</h2>
-        <?php echo $message;?>
-        <div style="color:red;">
-            <?php echo validation_errors();?>
-        </div>
+        
         <?php echo form_open('course/verify_id');?>
         <p>Select Type</p>
         <?php
@@ -36,15 +33,26 @@
         <table>
             <tr>
                 <td>ID:</td>
-                <td><?php echo form_input('ID',set_value('ID'));?></td>
+                <td><?php echo form_input('ID',set_value('ID'));?>
+                    <?php echo form_error('ID'); ?>
+                </td>
             </tr>
             <tr>
                 <td>Password:</td>
-                <td><?php echo form_password('password');?></td>
+                <td><?php echo form_password('password');?>
+                    <?php echo form_error('password'); ?>
+                </td>
+                
             </tr>
             <tr>
                 <td></td>
-                <td><?php echo form_submit('submit','LOGIN');?></td>
+                <td>
+                     <div style="color:red;">
+                        <?php echo $message;?>
+                        <?php //echo validation_errors();?>
+                    </div>
+                    <?php echo form_submit('submit','LOGIN');?>
+                </td>
             </tr>
         </table>
         <?php echo form_close();?>
