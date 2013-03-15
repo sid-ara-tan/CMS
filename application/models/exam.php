@@ -289,12 +289,13 @@ class Exam extends CI_Model{
         }
     }
 
-    function add_exam($courseno){
+    function add_exam($courseno,$etypename){
         $etype=$this->input->post('exam_type');
         $etype=str_replace(" ","_",$etype);
         $data=array(
           'CourseNo' => $courseno,
           'etype' => $etype,
+          'etypename'=>$etypename,
           'Description' => $this->input->post('Description'),
           'Marks_Type'=>  $this->input->post('Marks_Type')
         );
@@ -304,7 +305,7 @@ class Exam extends CI_Model{
     function delete_exam($courseno,$exam_type){
         $this->db->where('CourseNo',$courseno);
         $this->db->where('etype',$exam_type);
-        $this->db->delete('Exam_Type');
+        $this->db->delete('exam_type');
 
     }
 
@@ -316,12 +317,12 @@ class Exam extends CI_Model{
         );
         $this->db->where('CourseNo',$courseno);
         $this->db->where('etype',$etype);
-        $this->db->update('Exam_Type',$data);
+        $this->db->update('exam_type',$data);
     }
 
     function get_exam_type($courseno){
         $query=$this->db->query("
-            Select etype,Description,Percentage,Marks_Type
+            Select etype,Description,Percentage,Marks_Type,etypename
             From exam_type
             Where CourseNo='$courseno'
             ");
@@ -332,6 +333,16 @@ class Exam extends CI_Model{
             return $data;
         }else{
             return FALSE;
+        }
+    }
+
+    function get_etypename($courseno,$etype){
+        $this->db->select('etypename');
+        $this->db->where('CourseNo',$courseno);
+        $this->db->where('etype',$etype);
+        $query=$this->db->get('exam_type');
+        if($query->num_rows()>0){
+            return $query->row()->etypename;
         }
     }
 
