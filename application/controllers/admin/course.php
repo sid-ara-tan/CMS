@@ -588,4 +588,43 @@
         }
         $this->manage_irregular_student();
     }
+
+    function reset_course_group(){
+        $data=array(
+            'msg'=>'Course Information',
+            'info'=>'',
+            'title'=>'Reset course group'
+        );
+
+        $this->load->view('admin/reset_course_group',$data);
+    }
+    
+    function selected_course_list_for_reset(){
+        $data=array(
+            'msg'=>'Course Information',
+            'info'=>'',
+            'title'=>'Reset course group'
+        );
+        $sLevel=$this->input->post('sLevel');
+        $Term=$this->input->post('Term');
+        $data['courses_by_level_term']=$this->course_model->get_course_by_level_term($sLevel,$Term);
+        $this->load->view('admin/reset_course_group2',$data);
+    }
+
+    function reset_selected_course_group(){
+        $courseno=$this->input->post('courseno');
+        echo 'going to reset'.$courseno;
+
+        /*
+          $this->course_model->delete_takencourse($config);
+          $this->course_model->delete_assignedcourse($config);
+          $this->course_model->delete_classinfo($config);
+          $this->course_model->delete_exam($config);
+          $this->course_model->delete_marks($config);
+          $this->course_model->delete_content($config);
+          $this->course_model->delete_message($config);
+         
+         */
+        $this->reset_course_group();
+    }
 }

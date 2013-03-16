@@ -45,6 +45,12 @@
             'class'=>'icn_categories'
         ),
 
+        'reset group'=>array(
+            'name'=>'Reset Course Group',
+            'link'=>  site_url('admin/course/reset_course_group'),
+            'class'=>'icn_photo'
+        ),
+        
         'assign_teacher_course'=>array(
             'name'=>'Assign teacher for Course',
             'link'=>  site_url('admin/course/assign_teacher_for_these_course'),
@@ -53,7 +59,7 @@
         'assign_student_course'=>array(
             'name'=>'Assign Student to Course',
             'link'=>  site_url('admin/course/assign_student_to_course'),
-            'class'=>'icn_settings'
+            'class'=>'icn_photo'
         ),
         'drop_student_course'=>array(
             'name'=>'Delete Student from Course',
@@ -63,7 +69,7 @@
         'manage_irregular_student'=>array(
             'name'=>'Manage Irregular Student',
             'link'=>  site_url('admin/course/manage_irregular_student'),
-            'class'=>'icn_settings'
+            'class'=>'icn_categories'
         )
     );
 
