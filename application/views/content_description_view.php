@@ -8,11 +8,9 @@
     <div class="wrapper row1">
         <div id="header" class="clear">
             <div class="fl_left">
-                <h1><a href="index.html">Course Management System</a></h1>
-                <p>Teacher Panel of <b><?php echo " ".$info->Name.""; ?></b>
-                    <br>
-                    <?php echo anchor('course/logout', 'Log Out'); ?>
-                </p>
+              <p style="font-size: 30px">Bangladesh University of Engineering and Technology</p>
+              <p style="font-size: 20px">Department of Computer Science and Engineering</p>
+              <p style="font-size: 15px">Online Course Management System</p>
             </div>
         </div>
     </div>
@@ -21,7 +19,8 @@
         <div id="topnav">
             <ul>
                 <li class="active"><a href="<?php echo base_url().'index.php/teacher_home/class_content/'.$courseno;?>">Back</a></li>
-
+                <li><a href="<?php echo base_url();?>index.php/logout">Logout</a></li>
+                <li style="padding-left:500px"><?php echo "" . $info->Name . ""; ?></li>
             </ul>
             <div  class="clear"></div>
         </div>

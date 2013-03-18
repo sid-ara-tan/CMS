@@ -613,18 +613,78 @@
 
     function reset_selected_course_group(){
         $courseno=$this->input->post('courseno');
-        echo 'going to reset'.$courseno;
+        //echo 'going to reset:'.$courseno.'<br/>';
 
-        /*
-          $this->course_model->delete_takencourse($config);
-          $this->course_model->delete_assignedcourse($config);
-          $this->course_model->delete_classinfo($config);
-          $this->course_model->delete_exam($config);
-          $this->course_model->delete_marks($config);
-          $this->course_model->delete_content($config);
-          $this->course_model->delete_message($config);
-         
-         */
-        $this->reset_course_group();
+        
+        if($this->course_model->reset_notification($courseno)){
+                $notification_reset='notification reset successful'.'<br/>'.'<br/>';
+        }else $notification_reset='notification reset failed'.'<br/>'.'<br/>';
+
+        if($this->course_model->reset_comment($courseno)){
+                $comment_reset='comment reset successful'.'<br/>'.'<br/>';
+        }else $comment_reset='comment reset failed'.'<br/>'.'<br/>';
+
+
+        if($this->course_model->reset_message($courseno)){
+                $message_reset='message reset successful'.'<br/>'.'<br/>';
+        }else $message_reset='message reset failed'.'<br/>'.'<br/>';
+
+
+        if($this->course_model->reset_file($courseno)){
+                $file_reset='file reset successful'.'<br/>'.'<br/>';
+        }else $file_reset='file reset failed'.'<br/>'.'<br/>';
+
+        if($this->course_model->reset_class_content($courseno)){
+                $class_content_reset='class_content reset successful'.'<br/>'.'<br/>';
+        }else $class_content_reset='class_content reset failed'.'<br/>'.'<br/>';
+
+
+        if($this->course_model->reset_class_info($courseno)){
+                $class_info_reset='class_info reset successful'.'<br/>'.'<br/>';
+        }else $class_info_reset='class_info reset failed'.'<br/>'.'<br/>';
+
+
+        if($this->course_model->reset_marks($courseno)){
+                $marks_reset='marks reset successful'.'<br/>'.'<br/>';
+        }else $marks_reset='marks reset failed'.'<br/>'.'<br/>';
+
+        
+        if($this->course_model->reset_exam($courseno)){
+                $exam_reset='exam reset successful'.'<br/>'.'<br/>';
+        }else $exam_reset='exam reset failed'.'<br/>'.'<br/>';
+
+        if($this->course_model->reset_exam_type($courseno)){
+                $exam_type_reset='exam_type reset successful'.'<br/>'.'<br/>';
+        }else $exam_type_reset='exam_type reset failed'.'<br/>'.'<br/>';
+
+        if($this->course_model->reset_takencourse($courseno)){
+                $takencourse_reset='takencourse reset successful'.'<br/>'.'<br/>';
+        }else $takencourse_reset='takencourse reset failed'.'<br/>'.'<br/>';
+
+
+        if($this->course_model->reset_assignedcourse($courseno)){
+                $assignedcourse_reset='assignedcourse reset successful'.'<br/>'.'<br/>';
+        }else $assignedcourse_reset='assignedcourse reset failed'.'<br/>'.'<br/>';
+
+        $notifying_message='<h1>'.$courseno.' reset status'.'</h1>'.'<br/>'.'<br/>';
+
+        $notifying_message.=$notification_reset;
+        $notifying_message.=$comment_reset;
+        $notifying_message.=$message_reset;
+        $notifying_message.=$file_reset;
+        $notifying_message.=$class_content_reset;
+        $notifying_message.=$class_info_reset;
+        $notifying_message.=$takencourse_reset;
+        $notifying_message.=$assignedcourse_reset;
+        $notifying_message.=$marks_reset;
+        $notifying_message.=$exam_type_reset;
+        $notifying_message.=$exam_reset;
+        $data=array(
+            'msg'=>'Course Information',
+            'info'=>'',
+            'title'=>'Reset course group'
+        );
+        $data['notifying_message']=$notifying_message;
+        $this->load->view('admin/reset_course_group',$data);        
     }
 }

@@ -270,4 +270,53 @@
         $result=$this->db->get('student');
         return $result;
     }
+
+    function is_group_exist($prefix){        
+        $prefix.='%';
+        $result=$this->db->query("
+                    select S_Id from student where S_Id like '$prefix'
+                ");
+        if($result->num_rows()==0){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    //added by Arafat
+    function update_level_term_of_student($student,$data){
+        $this->db->where('S_Id',$student);
+        return $this->db->update('student',$data);
+    }
+
+    function  check_failed_status_std_no($student){
+        $this->db->where('S_Id',$student);
+        $this->db->where('Status','failed');
+        $result=$this->db->get('takencourse');
+        if($result->num_rows()>0){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    function  check_running_status_std_no($student){
+        $this->db->where('S_Id',$student);
+        $this->db->where('Status','Running');
+        $result=$this->db->get('takencourse');
+        if($result->num_rows()>0){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    function delete_group_of_student($student){
+        $this->db->where('S_Id',$student);
+        $this->db->delete('marks');
+        $this->db->where('S_Id',$student);
+        $this->db->delete('takencourse');        
+        $this->db->where('S_Id',$student);
+        return $this->db->delete('student');
+    }
 }

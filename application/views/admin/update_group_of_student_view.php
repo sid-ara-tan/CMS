@@ -3,6 +3,26 @@
     $this->load->view('admin/template/header',$data);
 ?>
 
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function(){
+        $('#update_group_of_student_submit').click(function(){                          
+                var form_data ={
+                    sLevel:$('#sLevel').val(),
+                    Term:$('#Term').val()
+                };
+
+                $.ajax({
+                    url:"<?php echo site_url('admin/student/ajax_update_list_of_student'); ?>",
+                    type:'POST',
+                    data:form_data,
+                    success:function(msg){
+                        $('#student_list').html(msg);
+                    }
+                });
+                return false;
+        });
+    });
+</script>
 </head>
 
 <body>
@@ -27,17 +47,10 @@
         <div>
               <div id="search_div">
                 <div align="center" class="search_header">
-                    <span style="font-size: 24px;">Reset Course Group</span>                    
+                    <span style="font-size: 24px;">Update group of Students</span>
                 </div>
-                <h2>Following things will be reset:</h2>
-                    <ul>
-                        <li>Teacher asssigned in the course</li>
-                        <li>Student enrolled in the course</li>
-                        <li>All the content and message</li>
-                        <li>All uploaded marks in the course</li>
-                    </ul>
                 <div class="search_form">
-                     <?php echo form_open('admin/course/selected_course_list_for_reset','id=" "');?>
+                     <?php echo form_open('','id="create_group_of_student_form"');?>
                        <table cellpadding="0" cellspacing="20" border="0">
                            <?php
                                 $options=array(
@@ -60,23 +73,22 @@
                             <tr>
                                 <td><?php echo form_label('Term','Term');?></td>
                                 <td><?php echo form_dropdown('Term',$options,set_value('Term'),'id="Term"');?></td>
-                            </tr>
+                            </tr>                            
                             <tr>
                                 <td></td>
-                                <td><?php echo form_submit('submit','Show Course');?></td>
+                                <td><?php echo form_submit('submit','Show student list','id="update_group_of_student_submit"');?></td>
                             </tr>
                         </table>
 
                        <?php echo form_close();?>
                 </div>
            </div>
-            <div style="padding-left: 10px">
-                <?php if(isset($notifying_message)):?>
-                <?php echo '<hr/>'.$notifying_message;?>
-                <?php endif;?>
-            </div>
         </div>
-
+        <div id="student_list"></div>
+        <?php if(isset($output_article)):?>
+        <?php echo $output_article;?>
+        <?php endif;?>
+        <?php echo br(1000);?>
         </article>
     </section>
 

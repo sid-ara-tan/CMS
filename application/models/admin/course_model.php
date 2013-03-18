@@ -342,5 +342,72 @@
         }
     }
 
+    function reset_takencourse($courseno){          
+        $query1=$this->db->query("
+          Update takencourse set Status='passed'
+          where GPA>0 and CourseNo='$courseno'
+          ");
+        $query2=$this->db->query("
+          Update takencourse set Status='failed'
+          where GPA=0 or GPA is NULL and CourseNo='$courseno'
+          ");
+
+        if($query1 && $query2){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    function reset_assignedcourse($courseno){
+        $this->db->where('CourseNo',$courseno);
+        return $this->db->delete('assignedcourse');
+    }
+
+    function reset_class_content($courseno){
+        $this->db->where('CourseNo',$courseno);
+        return $this->db->delete('content');
+    }
+
+    function reset_class_info($courseno){
+        $this->db->where('CourseNo',$courseno);
+        return $this->db->delete('classinfo');
+    }
+
+    function reset_exam($courseno){
+        $this->db->where('CourseNo',$courseno);
+        return $this->db->delete('exam');
+    }
+
+    function reset_exam_type($courseno){
+        $this->db->where('CourseNo',$courseno);
+        return $this->db->delete('exam_type');
+    }
+
+    function reset_marks($courseno){
+        $this->db->where('CourseNo',$courseno);
+        return $this->db->delete('marks');        
+    }
+
+    function reset_comment($courseno){
+        $this->db->where('CourseNo',$courseno);
+        return $this->db->delete('comment');
+    }
+
+    function reset_file($courseno){
+        $this->db->where('CourseNo',$courseno);
+        return $this->db->delete('file');
+    }
+
+    function reset_message($courseno){
+        $this->db->where('CourseNo',$courseno);
+        return $this->db->delete('message_group_student');
+    }
+
+    function reset_notification($courseno){
+        $this->db->where('material_id',$courseno);
+        return $this->db->delete('notification');
+    }
+
 
 }

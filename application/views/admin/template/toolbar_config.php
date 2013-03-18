@@ -30,12 +30,12 @@
             'name'=>'Make Routine',
             'link'=>  site_url('admin/department/make_routine'),
             'class'=>'icn_settings'
-        ),
+        )/*,
         'schedule_period'=>array(
             'name'=>'Schedule Task',
             'link'=>  site_url('admin/department/schedule_period'),
             'class'=>'icn_photo'
-        )
+        )*/
     );
 
     $course=array(
@@ -96,13 +96,28 @@
         'add_student'=>array(
             'name'=>'Create a student',
             'link'=>  site_url('admin/student/add_a_student'),
-            'class'=>'icn_new_article'
+            'class'=>'icn_add_user'
         ),
-        'taken_course'=>array(
+        /*'taken_course'=>array(
             'name'=>'View taken course of student',
             'link'=>  site_url('admin/student/pending_request'),
             'class'=>'icn_categories'
+        ),*/
+        'create group'=>array(
+            'name'=>'Create group of students',
+            'link'=>  site_url('admin/student/create_group_of_student'),
+            'class'=>'icn_new_article'
         ),
+        'update group'=>array(
+            'name'=>'Update group of students',
+            'link'=>  site_url('admin/student/update_group_of_student'),
+            'class'=>'icn_categories'
+        ),
+        'delete group'=>array(
+            'name'=>'Delete group of students',
+            'link'=>  site_url('admin/student/delete_group_of_student'),
+            'class'=>'icn_settings'
+        )
     );
 
     $data['navigator']=array(
