@@ -291,7 +291,7 @@
 
     function  check_failed_status_std_no($student){
         $this->db->where('S_Id',$student);
-        $this->db->where('Status','Failed');
+        $this->db->where('Status','failed');
         $result=$this->db->get('takencourse');
         if($result->num_rows()>0){
             return TRUE;

@@ -70,6 +70,11 @@
                        <?php echo form_close();?>
                 </div>
            </div>
+            <div style="padding-left: 10px">
+                <?php if(isset($notifying_message)):?>
+                <?php echo '<hr/>'.$notifying_message;?>
+                <?php endif;?>
+            </div>
         </div>
 
         </article>
