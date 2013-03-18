@@ -613,7 +613,7 @@
 
     function reset_selected_course_group(){
         $courseno=$this->input->post('courseno');
-        echo 'going to reset'.$courseno;
+        echo 'going to reset:'.$courseno;
 
         /*
           $this->course_model->delete_takencourse($config);

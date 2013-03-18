@@ -450,6 +450,7 @@
         $data['all_departments']= $this->department_model->get_all_department();
         $this->load->view('admin/group_of_student_view',$data);
     }
+ 
 
     /**
      *  Get searching data group by these following criteria
@@ -1041,6 +1042,278 @@
             echo 'Failed';
         }
 
+
+    }
+
+
+    function  create_group_of_student(){
+        $data=array(
+            'msg'=>'create group of students',
+            'info'=>'',
+            'title'=>'create group of students'
+        );
+        $this->load->view('admin/create_group_of_student_view',$data);
+    }
+
+    function validate_group_exist(){
+        $Year=$this->input->post('Year');
+        $prefix=substr($Year,2,2);
+        if($this->student_model->is_group_exist($prefix)){
+            echo 'true';
+        }
+        else{
+            echo 'false';
+        }
+    }
+
+    function ajax_create_group_of_student(){
+        $data=array();
+        $data['sLevel']=$this->input->post('sLevel');
+        $data['Term']=$this->input->post('Term');
+        $data['Dept_id']='CSE';
+        $Year=$this->input->post('Year');
+        $prefix=substr($Year,2,2);
+        $prefix.='05';
+        $std_code=$prefix;
+        $start_code='001';
+        $end_code=$this->input->post('no_of_student');
+
+        $i=intval($start_code);
+        $j=intval($end_code);
+
+        $std_id='';
+        $output='';
+        $no_of_succes=0;
+        $no_of_warning=0;
+        $no_of_error=0;
+
+        $div_error_msg='<div style="padding:5px;">';
+        $div_error_msg.='<img src="'.base_url().'/images/admin/error.png'.'" width="16px" height="16px"/>';
+
+        $div_success_msg='<div style="padding:5px;">';
+        $div_success_msg.='<img src="'.base_url().'/images/admin/valid.png'.'" width="16px" height="16px" />';
+
+        $div_warning_msg='<div style="padding:5px;">';
+        $div_warning_msg.='<img src="'.base_url().'/images/admin/warning.png'.'" width="16px" height="16px" />';
+
+        $div_message_end='</div>';
+
+        for($i;$i<=$j;$i++){
+            $std_id=$std_code.$this->number_pad($i,3);
+
+            $check_exist=  $this->student_model->is_student_Exists($std_id);
+
+            if($check_exist){
+                $output.=$div_warning_msg;
+                $output.=$std_id." "."this student id already exists";
+                $output.=$div_message_end;
+                $no_of_warning++;
+                continue;
+            }
+
+            $data['S_Id']=$std_id;
+            $data['Password']=random_string('alnum',10);
+            if($i>=1 && $i<=30)$data['sec']='A1';
+            else if($i>=31 && $i<=60)$data['sec']='A2';
+            else if($i>=61 && $i<=90)$data['sec']='B1';
+            else if($i>=91 && $i<=120)$data['sec']='B2';
+            else if($i>=121 && $i<=150)$data['sec']='C1';
+            else if($i>=151 && $i<=180)$data['sec']='C2';
+            $insert=$this->student_model->create_student($data);
+
+
+            if($insert){
+                $output.=$div_success_msg;
+                $output.=$std_id." "."successfully created";
+                $output.=$div_message_end;
+                $no_of_succes++;
+            }
+            else{
+                $output.=$div_error_msg;
+                $output.=$std_id.' '.'student creation failed';
+                $output.=$div_message_end;
+                $no_of_error++;
+            }
+            $output.=br();
+        }
+
+        $data_passed_to_view['output']=$output;
+        $data_passed_to_view['no_success']=$no_of_succes;
+        $data_passed_to_view['no_error']=$no_of_error;
+        $data_passed_to_view['no_warning']=$no_of_warning;
+
+
+        $output_article=$this->load->view('admin/group_create_status_view',$data_passed_to_view,TRUE);
+        echo $output_article;
+    }
+
+    function  update_group_of_student(){
+        $data=array(
+            'msg'=>'create group of students',
+            'info'=>'',
+            'title'=>'update group of students'
+        );
+        $this->load->view('admin/update_group_of_student_view',$data);
+    }
+
+    function ajax_update_list_of_student(){
+        
+        $sLevel=$this->input->post('sLevel');
+        $Term=$this->input->post('Term');
+        $data=array(
+            'msg'=>'Course Information',
+            'info'=>'',
+            'title'=>'update group of Student'
+        );
+
+        $data['sLevel']=$this->input->post('sLevel');
+        $data['Term']=$this->input->post('Term');
+        $data['student_by_level_term']=$this->student_model->get_student_by_level_term($sLevel,$Term);        
+        $this->load->view('admin/update_group_of_student_view2',$data);
+    }
+
+    function update_group_of_student2(){
+        $output='';
+        $no_of_succes=0;
+        $no_of_warning=0;
+        $no_of_error=0;
+
+        $div_error_msg='<div style="padding:5px;">';
+        $div_error_msg.='<img src="'.base_url().'/images/admin/error.png'.'" width="16px" height="16px"/>';
+
+        $div_success_msg='<div style="padding:5px;">';
+        $div_success_msg.='<img src="'.base_url().'/images/admin/valid.png'.'" width="16px" height="16px" />';
+
+        $div_warning_msg='<div style="padding:5px;">';
+        $div_warning_msg.='<img src="'.base_url().'/images/admin/warning.png'.'" width="16px" height="16px" />';
+
+        $div_message_end='</div>';
+
+        $data=array();
+        $takenlist=$this->input->post('taken_list');
+        
+        $data=array(
+            'sLevel'=>$this->input->post('sLevel'),
+            'Term'=>$this->input->post('Term')
+        );
+        if($takenlist!==FALSE){
+            foreach ($takenlist as $student) {
+                $update=$this->student_model->update_level_term_of_student($student,$data);
+
+                if($update){
+                    $output.=$div_success_msg;
+                    $output.=$student." "."successfully updated";
+                    $output.=$div_message_end;
+                    $no_of_succes++;
+                }
+                else{
+                    $output.=$div_error_msg;
+                    $output.=$student.' '.'student update failed';
+                    $output.=$div_message_end;
+                    $no_of_error++;
+                }
+                $output.=br();
+            }
+        }
+
+        $data_passed_to_view['output']=$output;
+        $data_passed_to_view['no_success']=$no_of_succes;
+        $data_passed_to_view['no_error']=$no_of_error;
+        $data_passed_to_view['no_warning']=$no_of_warning;
+        $data=array(
+            'msg'=>'Course Information',
+            'info'=>'',
+            'title'=>'update group of student'
+        );
+        $data['output_article']=$this->load->view('admin/group_update_status_view',$data_passed_to_view,TRUE);
+        $this->load->view('admin/update_group_of_student_view',$data);
+        
+    }
+
+    function  delete_group_of_student(){
+        $data=array(
+            'msg'=>'create group of students',
+            'info'=>'',
+            'title'=>'delete group of students'
+        );
+        $this->load->view('admin/delete_group_of_student_view',$data);
+    }
+
+    function ajax_delete_list_of_student(){
+
+        $sLevel=$this->input->post('sLevel');
+        $Term=$this->input->post('Term');
+        $data=array(
+            'msg'=>'Course Information',
+            'info'=>'',
+            'title'=>'delete group of Student'
+        );
+
+        $data['sLevel']=$this->input->post('sLevel');
+        $data['Term']=$this->input->post('Term');
+        $has_failed=array();
+        $has_running=array();
+        $data['student_by_level_term']=$this->student_model->get_student_by_level_term($sLevel,$Term);
+        foreach($data['student_by_level_term']->result() as $student){
+            $has_failed[$student->S_Id]=$this->student_model->check_failed_status_std_no($student->S_Id);
+            $has_running[$student->S_Id]=$this->student_model->check_running_status_std_no($student->S_Id);
+        }
+        $data['has_failed']=$has_failed;
+        $data['has_running']=$has_running;
+        $this->load->view('admin/delete_group_of_student_view2',$data);
+    }
+
+    function delete_group_of_student2(){
+        $output='';
+        $no_of_succes=0;
+        $no_of_warning=0;
+        $no_of_error=0;
+
+        $div_error_msg='<div style="padding:5px;">';
+        $div_error_msg.='<img src="'.base_url().'/images/admin/error.png'.'" width="16px" height="16px"/>';
+
+        $div_success_msg='<div style="padding:5px;">';
+        $div_success_msg.='<img src="'.base_url().'/images/admin/valid.png'.'" width="16px" height="16px" />';
+
+        $div_warning_msg='<div style="padding:5px;">';
+        $div_warning_msg.='<img src="'.base_url().'/images/admin/warning.png'.'" width="16px" height="16px" />';
+
+        $div_message_end='</div>';
+
+        $data=array();
+        $takenlist=$this->input->post('taken_list');
+        
+        if($takenlist!==FALSE){
+            foreach ($takenlist as $student) {
+                $delete=$this->student_model->delete_group_of_student($student);
+
+                if($delete){
+                    $output.=$div_success_msg;
+                    $output.=$student." "."successfully deleted";
+                    $output.=$div_message_end;
+                    $no_of_succes++;
+                }
+                else{
+                    $output.=$div_error_msg;
+                    $output.=$student.' '.'student deletion failed';
+                    $output.=$div_message_end;
+                    $no_of_error++;
+                }
+                $output.=br();
+            }
+        }
+
+        $data_passed_to_view['output']=$output;
+        $data_passed_to_view['no_success']=$no_of_succes;
+        $data_passed_to_view['no_error']=$no_of_error;
+        $data_passed_to_view['no_warning']=$no_of_warning;
+        $data=array(
+            'msg'=>'Course Information',
+            'info'=>'',
+            'title'=>'delete group of student'
+        );
+        $data['output_article']=$this->load->view('admin/group_delete_status_view',$data_passed_to_view,TRUE);
+        $this->load->view('admin/delete_group_of_student_view',$data);
 
     }
 }
