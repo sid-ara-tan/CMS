@@ -8,8 +8,9 @@
 <div class="wrapper row1">
   <div id="header" class="clear">
     <div class="fl_left">
-      <h1>Course Management System</h1>
-      <h3><font color="green"><?php echo $info->Name;?></font></h3>
+      <p style="font-size: 30px">Bangladesh University of Engineering and Technology</p>
+      <p style="font-size: 20px">Department of Computer Science and Engineering</p>
+      <p style="font-size: 15px">Online Course Management System</p>
     </div>
   </div>
 </div>
@@ -18,7 +19,7 @@
   <div id="topnav">
     <ul>
       <li><a href="<?php echo base_url();?>index.php/teacher_home">Class Routine</a></li>
-
+      <li><a href="<?php echo base_url(); ?>index.php/teacher_home/load_notification">Notification</a></li>
       <li  class="active"><a href="<?php echo base_url();?>index.php/teacher_home/show_profile">Profile</a></li>
       <li><a href="#">Assigned Course</a>
         <ul>
@@ -49,6 +50,14 @@
         ?>
         </ul>
        </li>
+       <?php
+            $this->db->where('Head_of_dept_id',$T_ID);
+            $this->db->where('Dept_id',$info->Dept_Id);
+            $query=$this->db->get('department');
+       ?>
+       <?php if($query->num_rows()>0):?>
+       <li><a href="<?php echo base_url()."index.php/teacher_home/head_of_dept/{$info->Dept_Id}" ?>">Head of Dept</a></li>
+       <?php endif;?>
       <li><a href="<?php echo base_url();?>index.php/logout">Logout</a></li>
       </ul>
     <div  class="clear"></div>
@@ -94,7 +103,8 @@
                 position: fixed;
                 ">Edit profile</p>
     <div class="panel" style="display:none">
-        <h1>Edit Information</h1>
+        <?php echo br(2);?>
+        <h1>Change Password</h1>
         <?php   echo form_open('teacher_home/edit_profile/edit'); ?>
         <table border="1" cellpadding="2" cellspacing="1" style="width:50%">
             <tr class="dark">
@@ -111,7 +121,10 @@
                     <?php echo form_error('password2','<p class="error">'); ?>
                 </td>
             </tr>
-
+        </table>
+        <?php echo br(2);?>
+        <h1>Edit Personal Information</h1>
+        <table border="1" cellpadding="2" cellspacing="1" style="width:50%">
             <tr class="dark">
                 <td><label for="name">Name:</label></td>
                 <td>
@@ -150,15 +163,10 @@
                 </td>
             </tr>
 
-             <tr class="light">
-                <td></td>
-                <td>
-                 <?php   echo form_submit('submit','Edit information');?>
-                </td>
-            </tr>
         </table>
-
-         <?php echo form_close();?>
+        <?php echo br(2);?>
+        <?php   echo form_submit('submit','Edit');?>
+        <?php echo form_close();?>
 
        <!-- <fieldset>
             <legend>Login Info Update :Teacher</legend>

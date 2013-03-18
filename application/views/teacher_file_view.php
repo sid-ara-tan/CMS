@@ -9,9 +9,9 @@
 <div class="wrapper row1">
   <div id="header" class="clear">
     <div class="fl_left">
-      <h1>Course Management System</h1>
-      <h3><font color="green"><?php echo $info->Name;?></font></h3>
-
+      <p style="font-size: 30px">Bangladesh University of Engineering and Technology</p>
+      <p style="font-size: 20px">Department of Computer Science and Engineering</p>
+      <p style="font-size: 15px">Online Course Management System</p>
     </div>
   </div>
 </div>
@@ -20,7 +20,7 @@
   <div id="topnav">
     <ul>
       <li><a href="<?php echo base_url();?>index.php/teacher_home">Class Routine</a></li>
-
+      <li><a href="<?php echo base_url(); ?>index.php/teacher_home/load_notification">Notification</a></li>
       <li><a href="<?php echo base_url();?>index.php/teacher_home/show_profile">Profile</a></li>
       <li><a href="#">Assigned Course</a>
         <ul>
@@ -51,6 +51,14 @@
         ?>
         </ul>
        </li>
+       <?php
+            $this->db->where('Head_of_dept_id',$T_ID);
+            $this->db->where('Dept_id',$info->Dept_Id);
+            $query=$this->db->get('department');
+       ?>
+       <?php if($query->num_rows()>0):?>
+       <li><a href="<?php echo base_url()."index.php/teacher_home/head_of_dept/{$info->Dept_Id}" ?>">Head of Dept</a></li>
+       <?php endif;?>
       <li><a href="<?php echo base_url();?>index.php/logout">Logout</a></li>
 
     </ul>

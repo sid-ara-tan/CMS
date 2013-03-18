@@ -8,8 +8,9 @@
 <div class="wrapper row1">
   <div id="header" class="clear">
     <div class="fl_left">
-      <h1>Course Management System</h1>
-      <h3><font color="azure"><?php echo $info->Name;?></font></h3>
+      <p style="font-size: 30px">Bangladesh University of Engineering and Technology</p>
+      <p style="font-size: 20px">Department of Computer Science and Engineering</p>
+      <p style="font-size: 15px">Online Course Management System</p>
     </div>
   </div>
 </div>
@@ -17,8 +18,8 @@
 <div class="wrapper row2" >
   <div id="topnav" >
     <ul>
-        <li><a href="<?php echo base_url();?>index.php/teacher_home">Class Routine</a></li>
-
+      <li><a href="<?php echo base_url();?>index.php/teacher_home">Class Routine</a></li>
+      <li><a href="<?php echo base_url(); ?>index.php/teacher_home/load_notification">Notification</a></li>
       <li><a href="<?php echo base_url();?>index.php/teacher_home/show_profile">Profile</a></li>
       <li><a href="#">Assigned Course</a>
         <ul>

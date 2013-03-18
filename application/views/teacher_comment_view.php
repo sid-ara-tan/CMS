@@ -11,11 +11,9 @@ $row_std = $query_student_info;
     <div class="wrapper row1">
         <div id="header" class="clear">
             <div class="fl_left">
-                <h1><a href="index.html">Course Management System</a></h1>
-                <p>Teacher Panel of <b><?php echo "* " . $row_std->Name . " *"; ?></b>
-                    <br>
-                    <?php echo anchor('course/logout', 'Log Out'); ?>
-                </p>
+              <p style="font-size: 30px">Bangladesh University of Engineering and Technology</p>
+              <p style="font-size: 20px">Department of Computer Science and Engineering</p>
+              <p style="font-size: 15px">Online Course Management System</p>                
             </div>
         </div>
     </div>
@@ -24,7 +22,8 @@ $row_std = $query_student_info;
         <div id="topnav">
             <ul>
                 <li class="active"><a href="<?php echo base_url().'index.php/teacher_message/index';?>">Back To Group</a></li>
-
+                <li><a href="<?php echo base_url();?>index.php/logout">Logout</a></li>
+                <li style="padding-left:500px"><?php echo "" . $row_std->Name . ""; ?></li>
             </ul>
             <div  class="clear"></div>
         </div>
