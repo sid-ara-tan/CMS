@@ -374,6 +374,11 @@ class Teacher_home extends CI_controller{
         mkdir('./uploads/' . $courseno,0777);
         }
         
+        if(!is_dir( './uploads/' . $courseno.'/task'))
+        {
+        mkdir( './uploads/' . $courseno.'/task',0777);
+        }
+        
         if (!$this->upload->do_upload("somefile")){
                 $message =$this->upload->display_errors();
                 $this->session->set_flashdata('content_message', $message);

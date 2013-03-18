@@ -18,7 +18,19 @@ function checkNull(frm)
     
     else frm.submit();
 }
-        
+
+function checkNull_assign(frm)
+{
+    if(frm.topic.value=="")
+    {
+        document.getElementById('topic_assignment').innerHTML="<font color='red'>*** Write Topic First</font>";
+        document.getElementById('topic').style.background="red";
+        frm.topic.focus();
+    }
+    
+    else frm.submit();
+}
+    
 function check()
 {
     var ans=confirm("Are you sure to delete ?");

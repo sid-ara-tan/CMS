@@ -16,20 +16,11 @@
                         
                         <?php echo form_hidden('courseno',$courseno);?>
                         <br /><br />
-                        <div>
-                        <select id="select_pvt" name="selectpvt">
-                            <!--<option value="" selected="selected">Select</option>-->
-                                <option value="1">Private(To Teacher Only)</option>
-                                <option value="0">Public</option>
-                        </select>
-                        <br>
-                        <?php echo form_label(' ( Select File Privacy ) ', 'file_privacy');?>
-                        </div>
-                        <hr>
+                        
                         <input type="button" value="upload" onclick="checkNull_file(this.form)" />
 
                         <?php echo form_close();?>
-                        
+                        <hr>
                         
                         <div class="file_conversation">
 

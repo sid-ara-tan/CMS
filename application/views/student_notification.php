@@ -1,5 +1,5 @@
 <?php
-$data['title'] = "Student Group Page Comment";
+$data['title'] = "Student Notification";
 $this->load->view('header/style_demo_header', $data);
 ?>
 

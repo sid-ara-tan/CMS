@@ -77,11 +77,9 @@ $row_std = $query_student_info->row();
     <div class="wrapper row1">
         <div id="header" class="clear">
             <div class="fl_left">
-                    <h1><a href="#">বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয়,ঢাকা</a></h1>
-                    <p>Computer Science & Engineering</b>
-                    <br>
-                    <?php //echo anchor('logout','Log Out');?>
-                </p>
+                    <h1>বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয়,ঢাকা</h1>
+                    <h3>Department Of Computer Science And Engineering</h3>
+                    <!--<b><font color="green">Online Course Management System</font></b>-->
             </div>
         </div>
     </div>
@@ -99,7 +97,7 @@ $row_std = $query_student_info->row();
                         ?>
                     </ul>
                 </li>
-                <li><?php echo anchor("student_home/course_registration", "Course Registration") ?></li>
+                <li><?php echo anchor("student_home/course_registration", "Course Status") ?></li>
                 <li><a href="#">Course Group</a>
                     <ul>
                         <?php

@@ -26,12 +26,14 @@ class Student_home_group extends CI_controller {
             $courseno = $course;
 
         $data['notification'] = $this->session->flashdata('notification');
+        $data['notification_task'] = $this->session->flashdata('notification_task');
 
         $offset = $this->uri->segment(4, 0);
         $this->load->model('message');
         $this->load->model('comment');
         $this->load->model('student');
         $this->load->model('teacher');
+        $this->load->model('file');
 
         $data['query_student_info'] = $this->query_student;
         $data['taken_course_query'] = $this->query_taken_course;
@@ -49,6 +51,8 @@ class Student_home_group extends CI_controller {
 
         //message
         $data['querymsg'] = $this->message->getallmessage($courseno, $config['per_page'], $offset);
+        //task file
+        $data['query_task_file'] = $this->file->get_task_file($courseno, $config['per_page'], $offset);
         //comment
         if ($data['querymsg'] != FALSE) {
             foreach ($data['querymsg'] as $row) {
@@ -63,13 +67,16 @@ class Student_home_group extends CI_controller {
             //var_dump($data);
         }
 
+        $is_valid_group=0;
         foreach ($this->query_taken_course->result_array() as $value) {
             if ($courseno == $value['CourseNo']) {
                 $data['coursename'] = $value['CourseName'];
                 $data['courseno'] = $courseno;
+                $is_valid_group=1;
                 $this->load->view('student_group_page', $data);
             }
         }
+        if($is_valid_group==0)echo "You don't have permission to access this page";
     }
 
     function group_message() {
@@ -227,6 +234,11 @@ class Student_home_group extends CI_controller {
         {
         mkdir('./uploads/' . $courseno,0777);
         }
+        
+        if(!is_dir( './uploads/' . $courseno.'/task'))
+        {
+        mkdir( './uploads/' . $courseno.'/task',0777);
+        }
 
 
         if ($this->form_validation->run() == FALSE) {
@@ -370,7 +382,7 @@ class Student_home_group extends CI_controller {
         echo $msg;
     }
 
-    function load_members_detail() {
+    function load_members_detail() {//unused
         $sId = $this->input->post('S_Id');
         $this->load->model('student');
         //var_dump($sId);
@@ -411,6 +423,47 @@ class Student_home_group extends CI_controller {
             echo "</div>";
 
             //echo "hello in";
+        }
+    }
+    
+    
+    function submit_task()
+    {
+        // $author=$this->session->userdata['ID'];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('topic', 'Topic', 'trim|required|max_length[50]|xss_clean'); //is_unique[users.username]
+        //$this->form_validation->set_rules('description', 'Description', 'trim|max_length[1000]|xss_clean');
+
+        $this->security->sanitize_filename($this->input->post('file_upload'));
+
+        $topic = nl2br(strip_quotes($this->input->post('topic')));
+       // $description = nl2br(strip_quotes($this->input->post('description')));
+        $courseno = $this->input->post('courseno');
+        //var_dump($courseno);
+        $config['upload_path'] = './uploads/' . $courseno.'/task/'.$topic;
+        $config['remove_spaces'] = TRUE;
+        $config['allowed_types'] = '*';
+        $this->load->library('upload', $config);
+
+////////////////////////////////////??????????????????//
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('notification_task', validation_errors());
+            redirect('student_home_group/group/' . $courseno);
+        } elseif (!$this->upload->do_upload("file_upload")) {
+            //$this->notification_file=$this->upload->display_errors();
+            //$this->group($courseno);
+            $this->session->set_flashdata('notification_task', $this->upload->display_errors());
+            //$this->session->keep_flashdata('notification_file');
+            redirect('student_home_group/group/' . $courseno);
+        } else {
+            $file_info = $this->upload->data();
+            //$file_notification='File:'.$file_info['file_name'].' is successfully Uploaded';
+            $this->load->model('file');
+            $this->file->insert_file($courseno, $topic, "", $file_info['file_name'], 1,1);
+            $this->session->set_flashdata('notification_task', "File : " . $file_info['file_name'] . " has been uploaded successfully");
+            // $this->session->keep_flashdata('notification_file');
+            redirect('student_home_group/group/' . $courseno);
         }
     }
 
