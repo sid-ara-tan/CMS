@@ -264,8 +264,8 @@
                     }
                     echo form_dropdown('Type', $options);
                 ?>
-                    <label for="Type"><small>Type</small></label>
-                    <input type="text" name="Title" maxlength="30" size="5" />
+                    <label for="Type"><small>Type</small></label><br />
+                    <input type="text" name="Title" maxlength="30" size="8" />
                     <label for="Title"><small>Exam No</small></label><br/>
                     <?php echo form_error('Title','<font color="red">', '</font><br />');?>
                     <textarea name="Syllabus" rows="10" cols="60"></textarea>
