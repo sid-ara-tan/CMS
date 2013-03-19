@@ -15,13 +15,13 @@
 <?php
 $tmpl = array('table_open' => '<table  class="display content_table_file">');
 $this->table->set_template($tmpl);
-$this->table->set_heading('Topic (Click To Download)', 'Description', 'Uploaded By', 'Date');
+$this->table->set_heading('Topic','File (Click To Download)', 'Description', 'Uploaded By', 'Date');
 
 if ($record_content != FALSE) {
     foreach ($record_content as $row_record) {
 
         $this->table->add_row(
-                anchor('student_home_group/download_file/' . $courseno . '/' . $row_record->File_Path, $row_record->Topic), $row_record->Description, $row_record->Uploader, $row_record->Upload_Time);
+                $row_record->Topic,anchor('student_home_group/download_file/' . $courseno . '/' . $row_record->File_Path, $row_record->File_Path), $row_record->Description, $row_record->Uploader, $row_record->Upload_Time);
     }
     echo $this->table->generate();
 } else {

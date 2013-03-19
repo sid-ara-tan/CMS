@@ -6,13 +6,13 @@
                         echo form_open_multipart('student_home_group/do_upload');?>
                         <?php echo form_label('Topic', 'topic_label');?>
                         <br>
-                        <input type="text" name="topic" value="" size="50"  />
+                        <input type="text" name="topic" value="" size="70"  />
                         <br>
                         <?php echo form_label('Description', 'description_label');?>
                         <br>
                         <textarea name="description" rows="5" cols="70" maxlenth="1000" ></textarea>
                         <br>
-                        <input type="file" name="file_upload" size="20" id="file_upload"  />
+                        <input type="file" name="file_upload" size="70" id="file_upload"  />
                         
                         <?php echo form_hidden('courseno',$courseno);?>
                         <br /><br />
@@ -29,7 +29,8 @@
                             foreach($record_file as $row_record_file){
                             ?>
                             <?php echo form_fieldset();?>
-                            <h3><?php echo anchor('student_home_group/download_file/'.$courseno.'/'.$row_record_file->filename, $row_record_file->topic); ?></h3>
+                            <h3><?php echo $row_record_file->topic;?></h3>
+                            <b><?php echo anchor('student_home_group/download_file/'.$courseno.'/'.$row_record_file->filename, $row_record_file->filename); ?></b><br>
                             <?php echo $row_record_file->description.'<br>';
                                 if($row_record_file->senderType=='student')echo "<br />uploaded by <font color='green'> ".${'nameof'.$row_record_file->file_id}.'</font>';
                                 elseif($row_record_file->senderType=='teacher')echo "<br />uploaded by <font color='red'> ".${'nameof'.$row_record_file->file_id}.'</font>';

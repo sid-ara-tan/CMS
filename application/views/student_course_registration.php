@@ -16,54 +16,45 @@ $row_std = $query_student_info->row();
     </script>
 
 <body id="top">
-    <div class="wrapper row1">
+      <div class="wrapper row1">
         <div id="header" class="clear">
             <div class="fl_left">
-                <h1><a href="index.html">Course Management System</a></h1>
-                <p>Student Panel of <b><?php echo "* " . $row_std->Name . " *"; ?></b>
-                    <br>
-                    <?php //echo anchor('logout', 'Log Out'); ?>
-                </p>
+            <p style="font-size: 30px">Bangladesh University of Engineering and Technology</p>
+            <p style="font-size: 20px">Department of Computer Science and Engineering</p>
+            <p style="font-size: 15px">Online Course Management System</p>
             </div>
         </div>
     </div>
     <!-- ####################################################################################################### -->
-<div class="wrapper row2">
-  <div id="topnav">
-    <ul>
-      <li><a href="<?php echo base_url();?>index.php/student_home">Home</a></li>
-      <li><a href="<?php echo base_url(); ?>index.php/student_home/load_notification">Notification</a></li>
-      <li><a href=""><?php echo $row_std->S_Id;?></a>
-         <ul>
-            <?php
-                    echo "<li>";
-                    echo anchor("student_home/profile","Edit Profile")."</li>" ;
-             ?>
-        </ul>
-      </li>
-      <li class="active"><?php echo anchor("student_home/course_registration","Course Registration")?></li>
-      <li><a href="#">Course Group</a>
-        <ul>
-            <?php
-            if($taken_course_query!=FALSE)
-            {
-                $course_taken=$taken_course_query->result_array();
+    <div class="wrapper row2">
+        <div id="topnav">
+            <ul>
+                <li ><a href="<?php echo base_url(); ?>index.php/student_home">Home</a></li>
+                <li><a href="<?php echo base_url(); ?>index.php/student_home/load_notification">Notification</a></li>
+                <li><a href="<?php echo base_url(); ?>index.php/student_home/profile">My Profile</a></li>
+                <li class="active"><?php echo anchor("student_home/course_registration", "Course Status") ?></li>
+                <li><a href="#">Course Group</a>
+                    <ul>
+                        <?php
+                        if ($taken_course_query != FALSE) {
+                            $course_taken = $taken_course_query->result_array();
 
-                foreach($course_taken as $row){
-                    echo "<li>";
-                    echo anchor("student_home/group/{$row['CourseNo']}",$row['CourseName'])."</li>" ;
-                }
-            }
-            else echo "<li>No Course Taken</li>";
-             ?>
-        </ul>
-      </li>
-      <li class="last"><?php echo anchor("student_home/result","Result")?></li>
-      <li><?php echo anchor('logout', 'Log Out'); ?></li>
-    </ul>
-    <div  class="clear"></div>
-  </div>
-</div>
+                            foreach ($course_taken as $row) {
+                                echo "<li>";
+                                echo anchor("student_home/group/{$row['CourseNo']}", $row['CourseName']) . "</li>";
+                            }
+                        }
+                        else
+                            echo "<li>No Course Taken</li>";
+                        ?>
+                    </ul>
+                </li>
+                <li class="last"><?php echo anchor("student_home/result", "Result") ?></li>
+                <li><?php echo anchor('logout', 'Log Out'); ?></li>
+            </ul>
+            <div  class="clear"></div>
+        </div>
+    </div>
     <!-- ####################################################################################################### -->
 
 

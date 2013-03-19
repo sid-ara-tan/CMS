@@ -119,7 +119,7 @@ class Student_home_group extends CI_controller {
 
         //$user_id=$this->session->userdata['ID'];
         //$data['query_student_name']=$this->db->query("select Name from Student where S_Id='$user_id'");
-
+        $data['taken_course_query'] = $this->query_taken_course;
         $data['notification'] = $this->session->flashdata('notification');
         ;
         $offset = $this->uri->segment(5, 0);

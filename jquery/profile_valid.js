@@ -49,30 +49,48 @@ function passCheck(frm)
     if(frm.password1.value!=frm.password2.value)
     {
         document.getElementById("btnsubmit").disabled=true;
+        document.getElementById('pass1').innerHTML="";
         document.getElementById('pass2').innerHTML="<font color='red'>*** password miss match.please type again </font>";
-        document.getElementById('p1').style.background="red";
+        //document.getElementById('p1').style.background="red";
+        document.getElementById('p2').style.background="red";
+        frm.password2.focus();
+    }
+
+    else    if(frm.password1.value.toString().length<4 && frm.password1.value.toString().length>0)
+    {
+        document.getElementById('pass1').innerHTML="<font color='red'>*** password length must be minimum 4 character </font>";
+        document.getElementById("btnsubmit").disabled=true;
+        frm.password1.focus();
+        document.getElementById('pass2').innerHTML="";
+        //document.getElementById('p1').style.background="white";
+        document.getElementById('p2').style.background="white";
+    }
+    else
+    {
+        document.getElementById("btnsubmit").disabled=false;
+        document.getElementById('pass1').innerHTML="<font color='green'>success</font>";
+        document.getElementById('pass2').innerHTML="";
+        document.getElementById('p1').style.background="white";
+        document.getElementById('p2').style.background="white";
+    }
+    
+}
+function passCheck_phase1(frm)
+{
+    //alert("as");  
+    if(frm.password2.value=="")
+    {
+        document.getElementById("btnsubmit").disabled=true;
+        document.getElementById('pass2').innerHTML="<font color='red'>*** Retype password </font>";
+        //document.getElementById('p1').style.background="red";
         document.getElementById('p2').style.background="red";
         frm.password2.focus();
     }
     else
     {
-        if(frm.password1.value.toString().length<4)
-        {
-            document.getElementById('pass1').innerHTML="<font color='red'>*** password length must be minimum 4 character </font>";
-            document.getElementById("btnsubmit").disabled=true;
-            frm.password1.focus();
-        }
-        else
-        {
-            document.getElementById("btnsubmit").disabled=false;
-            document.getElementById('pass1').innerHTML="<font color='green'>success</font>";
-            document.getElementById('pass2').innerHTML="";
-            document.getElementById('p1').style.background="white";
-            document.getElementById('p2').style.background="white";
-        }
+        document.getElementById("btnsubmit").disabled=false;
     }
-}
-     
+}     
 function std_profile_submit(frm)
 {
     if((frm.user_email.value=="")&&(frm.std_name.value=="")&&(frm.password1.value==""))alert("Enter Name,Email Address,Password First ");

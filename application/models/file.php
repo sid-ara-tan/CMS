@@ -68,6 +68,7 @@ class File extends CI_model {
         $query = $this->db->query("
                 SELECT * FROM file
                 WHERE CourseNo='$courseno'
+                AND type=0
                 ORDER BY ID desc
                 LIMIT $limit OFFSET $offset
                 ");

@@ -18,11 +18,11 @@ $tmpl = array ( 'table_open'  => '<table  class="display member_table">');
 if ($query_std_list != FALSE) {
 
     $this->table->set_template($tmpl);
-    $this->table->set_heading('ID', 'Name', 'E Mail','Action');
+    $this->table->set_heading('ID', 'Name', 'E Mail');
 
     foreach ($query_std_list->result_array() as $row) {
 
-        $this->table->add_row($row['S_Id'], $row['Name'], $row['email'],'');
+        $this->table->add_row($row['S_Id'], $row['Name'], $row['email']);
     }
     echo $this->table->generate();
 } else {

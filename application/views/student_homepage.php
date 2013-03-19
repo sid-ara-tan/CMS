@@ -77,9 +77,9 @@ $row_std = $query_student_info->row();
     <div class="wrapper row1">
         <div id="header" class="clear">
             <div class="fl_left">
-                    <h1>বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয়,ঢাকা</h1>
-                    <h3>Department Of Computer Science And Engineering</h3>
-                    <!--<b><font color="green">Online Course Management System</font></b>-->
+            <p style="font-size: 30px">Bangladesh University of Engineering and Technology</p>
+            <p style="font-size: 20px">Department of Computer Science and Engineering</p>
+            <p style="font-size: 15px">Online Course Management System</p>
             </div>
         </div>
     </div>
@@ -89,14 +89,7 @@ $row_std = $query_student_info->row();
             <ul>
                 <li class="active"><a href="<?php echo base_url(); ?>index.php/student_home">Home</a></li>
                 <li><a href="<?php echo base_url(); ?>index.php/student_home/load_notification">Notification</a></li>
-                <li><a href=""><?php echo $row_std->S_Id; ?></a>
-                    <ul>
-                        <?php
-                        echo "<li>";
-                        echo anchor("student_home/profile", "Edit Profile") . "</li>";
-                        ?>
-                    </ul>
-                </li>
+                <li><a href="<?php echo base_url(); ?>index.php/student_home/profile">My Profile</a></li>
                 <li><?php echo anchor("student_home/course_registration", "Course Status") ?></li>
                 <li><a href="#">Course Group</a>
                     <ul>
