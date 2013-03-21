@@ -64,24 +64,6 @@ class File extends CI_model {
         $this->db->insert('notification', $data_not);
     }
 
-    function get_file($courseno, $limit, $offset) {
-        $query = $this->db->query("
-                SELECT * FROM file
-                WHERE CourseNo='$courseno'
-                AND type=0
-                ORDER BY ID desc
-                LIMIT $limit OFFSET $offset
-                ");
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
     function delete_file($courseno, $filename) {
         $this->db->where('CourseNo', $courseno);
         $this->db->where('filename', $filename);
@@ -118,15 +100,49 @@ class File extends CI_model {
         return $query->num_rows();
     }
 
-    function get_task_file($courseno) {
+    function get_task_file($courseno,$type) {
         $user_id = $this->session->userdata['ID'];
         $query = $this->db->query("
                 SELECT * FROM file
                 WHERE CourseNo='$courseno'
                 AND uploader='$user_id'
-                AND type=1
+                AND type='$type'
                 ORDER BY ID desc
                 
+                ");
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            return FALSE;
+        }
+    }
+    
+    function get_file_all_std($courseno) {
+        $query = $this->db->query("
+                SELECT * FROM file
+                WHERE CourseNo='$courseno'
+                AND type=0
+                ORDER BY ID desc
+                ");
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            return FALSE;
+        }
+    }
+       function get_file_all_teach($courseno, $limit, $offset) {
+        $query = $this->db->query("
+                SELECT * FROM file
+                WHERE CourseNo='$courseno'
+                
+                ORDER BY ID desc
+                LIMIT $limit OFFSET $offset
                 ");
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
