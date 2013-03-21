@@ -365,6 +365,8 @@
     }
 
     function reset_class_content($courseno){
+        $path='./uploads/'.$courseno;
+        delete_files($path, TRUE);
         $this->db->where('CourseNo',$courseno);
         return $this->db->delete('content');
     }

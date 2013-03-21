@@ -86,7 +86,7 @@
 <div class="wrapper row2">
   <div id="topnav">
     <ul>
-      <li><a href="<?php echo base_url();?>index.php/teacher_home">Class Routine</a></li>
+      <li><a href="<?php echo base_url();?>index.php/teacher_home">Home</a></li>
       <li><a href="<?php echo base_url(); ?>index.php/teacher_home/load_notification">Notification</a></li>
       <li><a href="<?php echo base_url();?>index.php/teacher_home/show_profile">Profile</a></li>
       <li  class="active"><a href="#">Assigned Course</a>

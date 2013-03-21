@@ -18,7 +18,7 @@
 <div class="wrapper row2" >
   <div id="topnav" >
     <ul>
-        <li class="active"><a href="<?php echo base_url();?>index.php/teacher_home">Class Routine</a></li>
+        <li class="active"><a href="<?php echo base_url();?>index.php/teacher_home">Home</a></li>
       <li><a href="<?php echo base_url(); ?>index.php/teacher_home/load_notification">Notification</a></li>
       <li><a href="<?php echo base_url();?>index.php/teacher_home/show_profile">Profile</a></li>
       <li><a href="#">Assigned Course</a>
@@ -140,6 +140,63 @@
          <tfoot>
         </tfoot>
     </table>
+    <h2>Show other Class Routine</h2>
+    <?php echo form_open('teacher_home/all_class_routine');?>
+    <table class="tablesorter" cellspacing="0">
+        <thead>
+        </thead>
+        <tbody>        
+        <input type="hidden" name="Dept_id" value="<?php echo $info->Dept_Id;?>" />
+        <tr>
+            <?php
+                $options=array(
+                    '1'=>'1',
+                    '2'=>'2',
+                    '3'=>'3',
+                    '4'=>'4'
+                );
+            ?>
+            <td><?php echo form_label('Level','sLevel');?></td>
+            <td><?php echo form_dropdown('sLevel',$options,set_select('sLevel'),'id="sLevel"');?></td>
+            <td class="search_note">Select Level ex 1/2/3/4</td>
+        </tr>
+
+        <tr>
+            <?php
+            $options=array(
+                    '1'=>'1',
+                    '2'=>'2'
+                );
+            ?>
+            <td><?php echo form_label('Term','Term');?></td>
+            <td><?php echo form_dropdown('Term',$options,  set_select('Term'),'id="Term"');?></td>
+            <td class="search_note">Select Term ex 1/2</td>
+        </tr>
+        <tr>
+            <td><?php echo form_label('Section','Sec');?></td>
+            <?php  $options=array(
+                    'A'=>'A',
+                    'B'=>'B',
+                    'C'=>'C',
+                    'A1'=>'A1',
+                    'A2'=>'A2',
+                    'B1'=>'B1',
+                    'B2'=>'B2',
+                    'C1'=>'C1',
+                    'C2'=>'C2',
+                    'ALL'=>'ALL'
+                ); ?>
+            <td><?php echo form_dropdown('Sec',$options,' ','id="Sec"');?></td>
+            <td class="search_note">Enter Section</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td><?php echo form_submit('submit','Submit','id="submit"');?></td>
+        </tr>
+        </tbody>
+    </table>
+    <?php echo form_close();?>
 </div>
 
 
