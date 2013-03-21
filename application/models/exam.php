@@ -441,4 +441,25 @@ class Exam extends CI_Model{
         }
         else return FALSE;
     }
+    
+    function get_exam_task($courseno){
+        $id=$this->session->userdata['ID'];
+        $query=$this->db->query("
+            select Topic,eType
+            from exam,student
+            where CourseNo='$courseno' 
+            AND (
+            exam.Sec = Student.Sec
+            OR exam.Sec = substr( Student.Sec, 1, 1 )
+            )
+            and  S_Id='$id'
+            ");
+        if($query->num_rows()>0){
+            foreach($query->result() as $row){
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else return FALSE;
+    }
 }

@@ -34,6 +34,7 @@ class Student_home_group extends CI_controller {
         $this->load->model('student');
         $this->load->model('teacher');
         $this->load->model('file');
+        $this->load->model('exam');
 
         $data['query_student_info'] = $this->query_student;
         $data['taken_course_query'] = $this->query_taken_course;
@@ -53,6 +54,10 @@ class Student_home_group extends CI_controller {
         $data['querymsg'] = $this->message->getallmessage($courseno, $config['per_page'], $offset);
         //task file
         $data['query_task_file'] = $this->file->get_task_file($courseno,1);
+        $data['task_ex_name'] = $this->exam->get_exam_task($courseno);
+
+
+
         //comment
         if ($data['querymsg'] != FALSE) {
             foreach ($data['querymsg'] as $row) {
