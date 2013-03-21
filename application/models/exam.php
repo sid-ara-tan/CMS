@@ -90,6 +90,16 @@ class Exam extends CI_Model{
         $this->db->where('Sec',$this->input->post('Sec'));
         $this->db->where('ID',$id);
         $this->db->update('exam',$data);
+        
+        ////notification
+        $data = array(
+               'material_extra_info' => $time." ".$date,
+            );
+        $this->db->where('material','exam');
+        $this->db->where('material_id',$courseno);
+        $this->db->where('material_name',$id);
+        $this->db->where('member_id', $this->session->userdata['ID']);
+        $this->db->update('notification',$data);
     }
     
     function  get_routine($courseno){
