@@ -49,6 +49,30 @@ class Teacher_home extends CI_controller{
         $this->load->view('classroutine_view',$data);
 
     }
+    
+    function all_class_routine(){
+        $this->load->model('admin/department_model');
+        $this->load->model('admin/course_model');
+        $config=array(
+            'Dept_id'=>  $this->input->post('Dept_id'),
+            'sLevel'=>  $this->input->post('sLevel'),
+            'Term'=>  $this->input->post('Term'),
+            'Sec'=>  $this->input->post('Sec')
+        );
+               
+         $data=array(
+            'msg'=>'Departments Information',
+            'info'=>'',
+            'title'=>'Make Routine'
+        );
+        
+        $data['Dept_id']=$config['Dept_id'];
+        $data['sLevel']=$config['sLevel'];
+        $data['Term']=$config['Term'];
+        $data['Sec']=$config['Sec'];
+        
+        $this->load->view('classroutine_all_view',$data);
+    }
 
     function edit_exam($task,$courseno,$sec,$id){
         $this->check_course($courseno,$sec);
@@ -365,8 +389,8 @@ class Teacher_home extends CI_controller{
       $this->load->library('form_validation');
       $etype=$this->input->post('exam_type');
       $etypename=$this->input->post('exam_type');
-      //$etype=str_replace(" ","_",$etype);
-      //$_POST['exam_type']=$etype;
+      $etype=str_replace(" ","_",$etype);
+      $_POST['exam_type']=$etype;
       $this->form_validation->set_rules('exam_type','Exam Type','callback_exam_type_uniqness['.$courseno.']');
       if($this->form_validation->run()==false){
           $message=validation_errors();
