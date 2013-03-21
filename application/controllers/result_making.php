@@ -15,7 +15,22 @@ class Result_making extends CI_Controller{
        // $this->load->library('unit_test');
     }
 
+    function check_course($course,$sec=NULL){
+        if($sec===NULL){
+            if(!$this->teacher->is_in_course($course)){
+                echo 'You are not permitted in this page!';
+                die();
+            }
+        }else{
+            if(!$this->teacher->is_in_course_sec($course,$sec)){
+                echo 'You are not permitted in this page!';
+                die();
+            }
+        }
+    }
+    
     function make_result_for_course($courseno){
+        $this->check_course($courseno);
         $this->load->model('result');
         $rows=$this->result->get_result($courseno);
         foreach ($rows as $row) {

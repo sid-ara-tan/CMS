@@ -13,6 +13,20 @@ class Teacher_message extends CI_Controller{
         $this->designation=$row->Designation;
     }
 
+    function check_course($course,$sec=NULL){
+        if($sec===NULL){
+            if(!$this->teacher->is_in_course($course)){
+                echo 'You are not permitted in this page!';
+                die();
+            }
+        }else{
+            if(!$this->teacher->is_in_course_sec($course,$sec)){
+                echo 'You are not permitted in this page!';
+                die();
+            }
+        }
+    }
+
     function index(){
         $data['name']=$this->name;
         $data['designation']=$this->designation;
@@ -120,6 +134,7 @@ class Teacher_message extends CI_Controller{
         $msg_id=$this->uri->segment(3);
         $courseno=$this->uri->segment(4);
 
+        $this->check_course($courseno);
 
         //Pagination
         $config['total_rows'] =$this->comment->comment_number($courseno,$msg_id);
@@ -152,6 +167,10 @@ class Teacher_message extends CI_Controller{
         if($data['query_post']==FALSE)
         {
             $data['query_post']=$this->file->get($msg_id,$courseno);
+            if ($data['query_post'] == FALSE) {
+                echo "Error!Post May Not Be Available ";
+                die();
+            }
             $data['isfile']=true;
             $row=$data['query_post']->row();
             if($row->senderType=='student')$data['nameof']=$this->student->get_name($row->uploader);
@@ -188,6 +207,7 @@ class Teacher_message extends CI_Controller{
         $courseno=$this->uri->segment(4);
         $comment_id=$this->uri->segment(5);
 
+        $this->check_course($courseno);
         //$this->comment->delete($comment_id);
         $this->comment->delete($comment_id,$msg_id,$courseno);
         $this->session->set_flashdata('notification',"Comment has been deleted successfully");
@@ -196,6 +216,7 @@ class Teacher_message extends CI_Controller{
 
     function show_file($courseno)
     {
+        $this->check_course($courseno);
         $this->load->model('file');
         $this->load->model('comment');
         $this->load->model('student');
@@ -238,7 +259,7 @@ class Teacher_message extends CI_Controller{
 
         $courseno=$this->uri->segment(3);
         $filename=$this->uri->segment(4);
-
+        $this->check_course($courseno);
         $data = file_get_contents("uploads/$courseno/$filename");
         $name = $filename;
 

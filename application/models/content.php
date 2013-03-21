@@ -65,16 +65,30 @@ class Content extends CI_model{
     function delete_content($courseno,$id){
         $this->db->where('CourseNo',$courseno);
         $this->db->where('ID',$id);
-        $this->db->delete('content');
+        $result=$this->db->delete('content');
 
         ////notification
-        $data = array(
-        'status' => 0,
-        );
-        $this->db->where('material','content');
-        $this->db->where('material_id',$courseno);
-        $this->db->where('material_name',$id);
-        $this->db->update('notification',$data);
+        if($result){
+            $data = array(
+            'status' => 0,
+            );
+            $this->db->where('material','content');
+            $this->db->where('material_id',$courseno);
+            $this->db->where('material_name',$id);
+            $this->db->update('notification',$data);
+            return TRUE;
+        }
+        else return FALSE;
         
+    }
+
+    function get_file_path($courseno,$id){
+        $this->db->select('File_Path');
+        $this->db->where('CourseNo',$courseno);
+        $this->db->where('ID',$id);
+        $result=$this->db->get('content');
+        if($result->num_rows()>0){
+            return $result->row();
+        }else return FALSE;
     }
 }
