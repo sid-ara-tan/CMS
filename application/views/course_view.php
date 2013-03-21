@@ -168,10 +168,10 @@
                             <?php if($record!=FALSE):?>
                             <?php foreach ($record as $row):?>
                             <tr>
-                                <td><?php echo anchor('teacher_home/download_content/'.$courseno.'/'.$row->File_Path,$row->Topic);?></td>
+                                <td><?php echo anchor('teacher_home/download_content/'.$courseno.'/'.$row->ID,$row->Topic);?></td>
                                 <td><?php echo $this->teacher->get_name($row->Uploader_ID);?></td>
                                 <td><?php echo $row->Upload_Time;?></td>
-                                <td><?php if($T_ID==$row->Uploader_ID)echo anchor('teacher_home/delete_content/'.$courseno.'/'.$row->ID.'/'.$row->File_Path,'Delete','onclick=" return check()"');?></td>
+                                <td><?php if($T_ID==$row->Uploader_ID)echo anchor('teacher_home/delete_content/'.$courseno.'/'.$row->ID,'Delete','onclick=" return check()"');?></td>
                                 <td><?php if($T_ID==$row->Uploader_ID)echo anchor('teacher_home/content_description/'.$courseno.'/'.$row->ID,'View');?></td>
                             </tr>
                             <?php endforeach;?>
@@ -389,7 +389,7 @@
                         $str="div".$row->etype;
                         echo '<li><b><span onclick="showdiv(\''.$str.'\');">'.$row->etypename.'</span></b>';
                         if($this->exam->is_scheduled($courseno,$row->etype)==FALSE)
-                                echo anchor('teacher_home/delete_exam/'.$courseno.'/'.$row->etype,
+                                echo anchor('teacher_home/delete_exam/'.$courseno.'/'.urlencode($row->etype),
                                         '   [Delete]','onclick=" return check()"');
                         echo '<div style="display:none" id="div'.$row->etype.'"><pre>'.$row->Description.'</pre>';
                         echo '</div>';

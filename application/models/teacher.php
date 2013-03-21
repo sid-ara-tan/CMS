@@ -77,8 +77,46 @@ class Teacher extends CI_model{
         }
         else return FALSE;
     }
-    
-    
+
+    function is_in_course($courseno){
+        $ID=$this->session->userdata['ID'];
+        $this->db->where('CourseNo',$courseno);
+        $this->db->where('T_Id',$ID);
+        $result=$this->db->get('assignedcourse');
+        if($result->num_rows()>0){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+    function is_in_course_sec($courseno,$sec){
+        $ID=$this->session->userdata['ID'];
+        $this->db->where('CourseNo',$courseno);
+        $this->db->where('T_Id',$ID);
+        $this->db->where('Sec',$sec);
+        $result=$this->db->get('assignedcourse');
+        if($result->num_rows()>0){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+
+    function is_head(){
+        $ID=$this->session->userdata['ID'];
+        $info=$this->get_info();
+        $this->db->where('Head_of_dept_id',$ID);
+        $this->db->where('Dept_id',$info->Dept_Id);
+        $query=$this->db->get('department');
+        if($query->num_rows()>0){
+            return TRUE;
+        }else return FALSE;
+    }
+
+
+
+
     function get_name($id){
 
         $result=$this->db->query("

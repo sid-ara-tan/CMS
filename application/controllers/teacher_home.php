@@ -14,6 +14,26 @@ class Teacher_home extends CI_controller{
         $this->designation=$row->Designation;
     }
 
+    function check_course($course,$sec=NULL){        
+        if($sec===NULL){
+            if(!$this->teacher->is_in_course($course)){
+                echo 'You are not permitted in this page!';
+                die();
+            }
+        }else{
+            if(!$this->teacher->is_in_course_sec($course,$sec)){
+                echo 'You are not permitted in this page!';
+                die();
+            }
+        }
+    }
+
+    function check_head(){
+        if(!$this->teacher->is_head()){
+            echo 'You are not permitted in this page!';
+            die();
+        }
+    }
     /**
      * This function load the classroutine view of the the teacher
      * input:null
@@ -31,6 +51,7 @@ class Teacher_home extends CI_controller{
     }
 
     function edit_exam($task,$courseno,$sec,$id){
+        $this->check_course($courseno,$sec);
         $this->load->model('exam');
         $data['task']=$task;
         $data['courseno']=$courseno;
@@ -47,15 +68,15 @@ class Teacher_home extends CI_controller{
      * output:CourseView
      */
     function class_content($course,$message=''){
-
-        $this->load->model('teacher');
+        $this->check_course($course);
+        //$this->load->model('teacher');
         $this->load->model('content');
         $this->load->model('student');
         $this->load->model('exam');
         $this->load->model('result');
         $this->load->library('pagination');
 	$this->load->helper('url');
-
+        
         $record=$this->content->get_content($course,10,$this->uri->segment(4,0));
         $data['record']=$record;
         $data['name']=$this->name;
@@ -77,7 +98,7 @@ class Teacher_home extends CI_controller{
     }
 
     function content_description($courseno,$id){
-        $this->load->model('teacher');
+        $this->check_course($courseno);
         $data['courseno']=$courseno;
         $data['id']=$id;
         $this->load->view('content_description_view',$data);
@@ -94,6 +115,7 @@ class Teacher_home extends CI_controller{
     function process_form($courseno,$sec){
         $data['sec']=$sec;
         $data['courseno']=$courseno;
+        $this->check_course($courseno,$sec);
         $this->load->model('student');
         $this->load->model('exam');
         $this->load->view('exam_list',$data);
@@ -110,6 +132,8 @@ class Teacher_home extends CI_controller{
         $this->load->model('exam');
         $this->load->model('student');
         $this->exam->Edit_Total();
+        $this->check_course($courseno);
+        
         if($this->input->post('task')=='upload'){
             $this->exam->upload_marks();
         }else{
@@ -201,6 +225,7 @@ class Teacher_home extends CI_controller{
      * output:MarksList
      */
     function marks_list($courseno,$sec,$exam_ID){
+        $this->check_course($courseno,$sec);
         $data['sec']=$sec;
         $data['courseno']=$courseno;
         $data['exam_ID']=$exam_ID;
@@ -216,6 +241,7 @@ class Teacher_home extends CI_controller{
      *output:Message of scheduling
      */
     function schedule_exam($courseno){
+        $this->check_course($courseno);
         $this->load->library('form_validation');
         $this->load->helper('date');
         $this->form_validation->set_rules('Title','Exam No','required|max_length[30]|greater_than[0]|callback_exam_number_uniqness['.$courseno.']');
@@ -240,6 +266,7 @@ class Teacher_home extends CI_controller{
     }
 
     function edit_exam2($courseno,$id){
+        $this->check_course($courseno);
         $this->load->library('form_validation');
         $this->load->helper('date');
         
@@ -277,9 +304,6 @@ class Teacher_home extends CI_controller{
         
     }
 
-    function exam_number_uniqness2(){
-        
-    }
 
     /**
      *this function delete a scheduled exam from database
@@ -288,6 +312,7 @@ class Teacher_home extends CI_controller{
      * output:Delete message
      */
     function delete_scheduled($cousrseno,$sec,$ID){
+        $this->check_course($courseno,$sec);
         $this->load->model('exam');
         $this->exam->delete_scheduled($cousrseno,$sec,$ID);
         $this->session->set_flashdata('scheduling_message', 'Exam Deleted Successfully');
@@ -310,12 +335,13 @@ class Teacher_home extends CI_controller{
      * output:Message of exam type add
      */
     function add_exam($courseno){
+      $this->check_course($courseno);
       $this->load->model('Exam');
       $this->load->library('form_validation');
       $etype=$this->input->post('exam_type');
       $etypename=$this->input->post('exam_type');
-      $etype=str_replace(" ","_",$etype);
-      $_POST['exam_type']=$etype;
+      //$etype=str_replace(" ","_",$etype);
+      //$_POST['exam_type']=$etype;
       $this->form_validation->set_rules('exam_type','Exam Type','callback_exam_type_uniqness['.$courseno.']');
       if($this->form_validation->run()==false){
           $message=validation_errors();
@@ -345,8 +371,10 @@ class Teacher_home extends CI_controller{
      * output:Message of exam type delete
      */
     function delete_exam($courseno,$exam_type){
+      echo $exam_type;     
+      $this->check_course($courseno);
       $this->load->model('Exam');
-      $this->Exam->delete_exam($courseno,$exam_type);
+      $this->Exam->delete_exam($courseno,  urldecode($exam_type));
       $this->session->set_flashdata('addexam_message', 'Exam deleted Succesfully');
       redirect('teacher_home/class_content/'.$courseno);
     }
@@ -359,12 +387,13 @@ class Teacher_home extends CI_controller{
      * output:Message of file uploading
      */    
     function upload_file($courseno){
+        $this->check_course($courseno);
         $author=$this->input->post('Author');
         $topic=$this->input->post('Topic');
         $description=$this->input->post('Description');
         $config['upload_path'] = './uploads/'.$courseno;
         $config['allowed_types'] = '*';
-        $config['max_size']	= '3000';
+        $config['max_size']	= '0';
         $config['max_filename']='28';
         $this->load->library('upload', $config);
 
@@ -404,15 +433,22 @@ class Teacher_home extends CI_controller{
      * input:CourseNo,Filename
      * output:Message of downloading
      */
-    function download_content($courseno,$filename){
+    function download_content($courseno,$id){
+        $this->check_course($courseno);
         $this->load->helper('download');
         $this->load->helper('url');
-        $data = file_get_contents("uploads/$courseno/$filename");
-        $name = $filename;
+        $this->load->model('content');
+        $row=$this->content->get_file_path($courseno,$id);
+        if($row!=FALSE){
+            $filename=$row->File_Path;
+            $data = file_get_contents("uploads/$courseno/$filename");
+            $name = $filename;
 
-        force_download($name, $data);
-
-
+            force_download($name, $data);
+        }else{
+            echo 'content not found';
+            die();
+        }
     }
 
     /**
@@ -421,15 +457,23 @@ class Teacher_home extends CI_controller{
      * input:CourseNo,id,filename
      * output:message of deletion
      */
-    function delete_content($courseno,$id,$filename){
-        echo $courseno.'|'.$id.'|'.$filename;
+    function delete_content($courseno,$id){
+        $this->check_course($courseno);
+        //echo $courseno.'|'.$id.'|'.$filename;
         $this->load->helper('file');
         $this->load->model('content');
-        $this->content->delete_content($courseno,$id);
-        //delete_files('uploads/$courseno/$filename', TRUE);
-        unlink("uploads/$courseno/$filename");
-        $this->session->set_flashdata('delete_message','Content Deleted Successfully');
-        redirect("teacher_home/class_content/$courseno");
+        $row=$this->content->get_file_path($courseno,$id);
+        if($row!=FALSE){
+            $this->content->delete_content($courseno,$id);
+            $filename=$row->File_Path;            
+            //delete_files('uploads/$courseno/$filename', TRUE);
+            unlink("uploads/$courseno/$filename");
+            $this->session->set_flashdata('delete_message','Content Deleted Successfully');
+            redirect("teacher_home/class_content/$courseno");
+        }else{
+            echo 'content not available';
+            die();
+        }
 
 
     }
@@ -498,6 +542,7 @@ class Teacher_home extends CI_controller{
     }
 
     function marks_distribution($courseno){
+        $this->check_course($courseno);
         $this->load->model('exam');
         $total=$this->exam->get_exam_type($courseno);
         foreach($total as $row){
@@ -519,7 +564,8 @@ class Teacher_home extends CI_controller{
         $this->load->view('percentage_form');
     }
 
-    function set_individual_percentage($courseno,$sec){     
+    function set_individual_percentage($courseno,$sec){
+        $this->check_course($courseno);
         $exam_array=explode(",", $this->input->post('Exam_ID'));
         $this->load->model('exam');
         foreach ($exam_array as $Exam_ID) {
@@ -530,6 +576,7 @@ class Teacher_home extends CI_controller{
     }
 
     function set_best_count($courseno,$sec,$etype){
+        $this->check_course($courseno,$sec);
         $this->load->model('exam');
         $this->exam->set_best_count($courseno,$sec,$etype);
         $this->session->set_flashdata('addexam_message', 'Best count set Succesfully');
@@ -549,18 +596,20 @@ class Teacher_home extends CI_controller{
 
         echo $this->unit->run($test,$expected);
 
-        }
+    }
 
     function squire($id=5){
         return $id*$id;
     }
 
     function head_of_dept($department){
+        $this->check_head();
         $data['department']=$department;
         $this->load->view('head_profile_view',$data);
     }
 
     function show_exam_info_for_head($department){
+        $this->check_head();
         $level=$this->input->post('level');
         $term=$this->input->post('term');
         $type=$this->input->post('type');
@@ -594,6 +643,7 @@ class Teacher_home extends CI_controller{
     }
 
     function show_exam_info_for_head2(){
+        $this->check_head();
         $this->load->model('exam');
         $this->db->where('CourseNo',$this->input->post('courseno'));
         $this->db->from('exam');

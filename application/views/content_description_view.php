@@ -38,6 +38,7 @@
                 $record=$query->row();
             }
             ?>
+            <?php if($query->num_rows()>0): ?>
             <h1><?php echo $record->Topic;?></h1>
             <p><strong>Description:</strong></p>
             <div>
@@ -46,7 +47,8 @@
 
             <p><strong>Uploaded by:</strong> <?php echo $this->teacher->get_name($record->Uploader_ID);?> </p>
             <p><strong>Upload time:</strong> <?php echo $record->Upload_Time;?> </p>
-            <p><?php echo anchor('teacher_home/download_content/'.$courseno.'/'.$record->File_Path,'Download');?></p>
+            <p><?php echo anchor('teacher_home/download_content/'.$courseno.'/'.$record->ID,'Download');?></p>
+            <?php endif;echo br(10);?>
         </div>
     </div>
 
