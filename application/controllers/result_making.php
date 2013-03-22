@@ -80,12 +80,12 @@ class Result_making extends CI_Controller{
 
     }
 
-    function  calculate_marks($S_ID='0805001',$courseno='CSE305'){
+    function  calculate_marks($S_ID,$courseno){
         $this->load->model('result');
         $this->load->model('exam');
         $this->load->model('student');
-        
-        $sec=$this->student->get_sec($S_ID);        
+        $sec=$this->result->get_sec_for_course($S_ID,$courseno);
+        //$sec=$this->student->get_sec($S_ID);        
         $exam_types=$this->exam->get_exam_type($courseno);
         $total=0;
         if($exam_types!=FALSE){

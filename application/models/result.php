@@ -59,4 +59,14 @@ class Result extends CI_Model{
             return FALSE;
         }
     }
+    
+    function get_sec_for_course($S_ID,$courseno){
+        $this->db->select('Section');
+        $this->db->where('CourseNo',$courseno);
+        $this->db->where('S_Id',$S_ID);
+        $result=$this->db->get('takencourse');
+        if($result->num_rows()>0){
+            return $result->row()->Section;
+        }else return FALSE;
+    }
 }
