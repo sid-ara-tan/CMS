@@ -90,6 +90,16 @@ class Exam extends CI_Model{
         $this->db->where('Sec',$this->input->post('Sec'));
         $this->db->where('ID',$id);
         $this->db->update('exam',$data);
+        
+        ////notification
+        $data = array(
+               'material_extra_info' => $time." ".$date,
+            );
+        $this->db->where('material','exam');
+        $this->db->where('material_id',$courseno);
+        $this->db->where('material_name',$id);
+        $this->db->where('member_id', $this->session->userdata['ID']);
+        $this->db->update('notification',$data);
     }
     
     function  get_routine($courseno){
@@ -428,6 +438,27 @@ class Exam extends CI_Model{
 
             $row=$query->row();
             return $row->eType." : ".$row->Topic;
+        }
+        else return FALSE;
+    }
+    
+    function get_exam_task($courseno){
+        $id=$this->session->userdata['ID'];
+        $query=$this->db->query("
+            select Topic,eType
+            from exam,student
+            where CourseNo='$courseno' 
+            AND (
+            exam.Sec = Student.Sec
+            OR exam.Sec = substr( Student.Sec, 1, 1 )
+            )
+            and  S_Id='$id'
+            ");
+        if($query->num_rows()>0){
+            foreach($query->result() as $row){
+                $data[]=$row;
+            }
+            return $data;
         }
         else return FALSE;
     }

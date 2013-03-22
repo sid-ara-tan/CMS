@@ -278,6 +278,7 @@
                     <input type="text" name="Title" maxlength="30" size="8" />
                     <label for="Title"><small>Exam No</small></label><br/>
                     <?php echo form_error('Title','<font color="red">', '</font><br />');?>
+                    
                     <textarea name="Syllabus" rows="10" cols="60"></textarea>
                     <label for="Syllabus"><small>Syllabus</small></label><br/>
                     <input type="text" name="Date" id="datepicker">
@@ -311,6 +312,10 @@
                     <input type="text" name="Location" maxlength="30" />
                     <label for="Location"><small>Location</small></label><br/>
                     <?php echo form_error('Location','<font color="red">', '</font><br />');?>
+                    
+                    <label for="acc_file"><b>Accept File  </b></label>
+                    <input type="checkbox" name="acc_file" value="accept"  />
+                    (Click Here If Students Have to submit file in this exam/task)<br><hr>
                     <input type="button" value="Sumbit" id="schedule_exam_button" />
 
                     <?php

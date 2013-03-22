@@ -284,6 +284,22 @@ class Teacher_home extends CI_controller{
             $this->Exam->schedule_exam($courseno);
             $this->session->set_flashdata('scheduling_message', 'Exam Scheduling Succesful');
             //$this->class_content($courseno,'Exam Scheduling Succesful');
+            if($this->input->post('acc_file')=="accept")
+            {
+                if(!is_dir('./uploads/' . $courseno))
+                {
+                    mkdir('./uploads/' . $courseno,0777);
+                }
+
+                if(!is_dir( './uploads/' . $courseno.'/task'))
+                {
+                    mkdir( './uploads/' . $courseno.'/task',0777);
+                }
+                if(!is_dir( './uploads/' . $courseno.'/task/'.$this->input->post('Type').$this->input->post('Title')))
+                {
+                    mkdir( './uploads/' . $courseno.'/task/'.$this->input->post('Type').$this->input->post('Title'),0777);
+                }
+            }
             redirect('teacher_home/class_content/'.$courseno);
         }
 
@@ -350,6 +366,15 @@ class Teacher_home extends CI_controller{
         $this->load->model('exam');
         $this->exam->delete_scheduled($cousrseno,$sec,$ID);
         $this->session->set_flashdata('scheduling_message', 'Exam Deleted Successfully');
+        
+            $path=$this->config->base_url(). 'uploads/' . $cousrseno.'/task/'.$this->input->post('eType').$this->input->post('eNo');
+            
+           // echo $path; 
+            $this->load->helper("file"); // load the helper
+            delete_files($path, true); // delete all files/folders
+
+            rmdir($path);//not wroking ?
+        
         redirect('teacher_home');
     }
 

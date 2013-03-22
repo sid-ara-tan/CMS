@@ -348,7 +348,19 @@ $row_std = $query_student_info->row();
                     ?>
                     <?php echo form_label('Topic', 'topic_label'); ?>
                     <br>
-                    <input type="text" id="topic" name="topic" value="" size="20"  />
+                    <?php if($task_ex_name!=False)
+                        {?>
+                        <select id="select" name="topic">
+                            <option value="" selected="selected">Select an Option</option>
+                            <?php  foreach ($task_ex_name as $row)
+                            { ?>
+                                    <option value="<?php echo $row->eType.$row->Topic?>"><?php echo $row->eType.$row->Topic;?></option>
+
+                            <?php } ?>
+                        </select>
+                    <?php }
+                    else echo "Sorry No Exam Availbale";
+                    ?>
                     <br>
                     <div id="topic_assignment"></div>
                     <input type="file" name="file_upload" size="30" id="file_upload"  />

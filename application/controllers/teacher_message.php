@@ -228,7 +228,7 @@ class Teacher_message extends CI_Controller{
         //$courseno=$this->input->post('courseno');
         $data['courseno']=$courseno;
         $config['per_page'] ='5';        
-        $record_file=$this->file->get_file($courseno,$config['per_page'],$this->uri->segment(4,0));
+        $record_file=$this->file->get_file_all_teach($courseno,$config['per_page'],$this->uri->segment(4,0));
         $data['record_file']=$record_file;
 
         if($data['record_file']!=FALSE)
