@@ -172,7 +172,7 @@
                                 <td><?php echo $this->teacher->get_name($row->Uploader_ID);?></td>
                                 <td><?php echo $row->Upload_Time;?></td>
                                 <td><?php if($T_ID==$row->Uploader_ID)echo anchor('teacher_home/delete_content/'.$courseno.'/'.$row->ID,'Delete','onclick=" return check()"');?></td>
-                                <td><?php if($T_ID==$row->Uploader_ID)echo anchor('teacher_home/content_description/'.$courseno.'/'.$row->ID,'View');?></td>
+                                <td><?php echo anchor('teacher_home/content_description/'.$courseno.'/'.$row->ID,'View');?></td>
                             </tr>
                             <?php endforeach;?>
                             <?php endif;?>
