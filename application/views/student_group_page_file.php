@@ -1,4 +1,17 @@
-                   <div class="demo">
+<script src="<?php echo base_url(); ?>jqueryUI/ui/jquery.ui.button.js"></script>
+<script>   
+$(function() {
+
+        $( "input:submit, button,input:button", ".demo" ).button();
+
+        //$( "a", ".demo" ).click(function() { return false; });
+
+    });
+    </script>
+
+
+
+<div class="demo">
                     <b><font color="red"><?php echo $notification_file; ?></font></b>
                     <h1>All files : </h1>
                         <?php
@@ -39,7 +52,8 @@
                                 echo '<div class="comment_box">';
                                 if($row_record_file->uploader==$this->session->userdata['ID'])
                                     {
-                                            $image_properties = array(
+                                        /*  
+                                        $image_properties = array(
                                             'src' => base_url() . 'images/admin/error.png',
                                             'alt' => 'delete',
                                             'width' => '15',
@@ -49,7 +63,17 @@
                                         //echo '<br>< '.anchor('student_home_group/group_message/delete/'.urlencode($this->encrypt->encode($row['MessageNo'])).'/'.$this->uri->segment(3),'Delete','onclick=" return check()"').' >';
                                         echo '<br> ';
                                         echo anchor('student_home_group/delete_file/'.$courseno.'/'.$row_record_file->filename,img($image_properties)."Delete",'onclick=" return check()"').' ';
-
+                                        */ 
+                                        echo form_open('student_home_group/delete_file'); 
+                                          
+                                         //echo "<div class='demo'>";
+                                         
+                                         echo form_hidden('courseno', $courseno);
+                                         echo form_hidden('filename', $row_record_file->filename);
+                                         $js = 'onclick=" return check()"';
+                                         echo form_submit('delete','Delete',$js);
+                                         //echo "</div>";
+                                         echo form_close();
                                     }
                                             $image_properties = array(
                                             'src' => base_url() . 'images/comment.png',

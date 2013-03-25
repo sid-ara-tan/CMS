@@ -3,6 +3,7 @@
 class Exam extends CI_Model{
 
     function schedule_exam($courseno){
+        $uptime = strftime("%Y-%m-%d %H:%M:%S", time());
         $T_ID=$this->session->userdata['ID'];
         $query=$this->db->query("
                 SELECT MAX(ID) as ID
@@ -223,6 +224,7 @@ class Exam extends CI_Model{
     }
 
     function upload_marks(){
+                $uptime = strftime("%Y-%m-%d %H:%M:%S", time());
         $rows=$this->student->get_studentformarks($this->input->post('CourseNo'),$this->input->post('Sec'));
         foreach ($rows as $row) {
             $data=array(
@@ -251,6 +253,7 @@ class Exam extends CI_Model{
     }
 
     function edit_marks(){
+                $uptime = strftime("%Y-%m-%d %H:%M:%S", time());
         $rows=$this->student->get_studentformarks($this->input->post('CourseNo'),$this->input->post('Sec'));
         foreach ($rows as $row) {
             $data=array(                

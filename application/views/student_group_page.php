@@ -293,7 +293,7 @@ $row_std = $query_student_info->row();
                                         echo '(' . $row->mTime . ')  ';
                                         if ($row->SenderInfo == $this->session->userdata['ID']) {
                                             //echo '<br>< '.anchor('student_home_group/group_message/delete/'.urlencode($this->encrypt->encode($row['MessageNo'])).'/'.$this->uri->segment(3),'Delete','onclick=" return check()"').' >';
-                                            $image_properties = array(
+                                         /*   $image_properties = array(
                                                 'src' => base_url() . 'images/admin/error.png',
                                                 'alt' => 'delete',
                                                 'width' => '15',
@@ -302,8 +302,20 @@ $row_std = $query_student_info->row();
                                             );
 
                                             echo anchor('student_home_group/group_message/delete/' . $row->MessageNo . '/' . $courseno, img($image_properties) . "  Delete", 'onclick=" return check();"') . ' ';
-                                        }
-
+                                       */
+                                         echo form_open('student_home_group/group_message/delete'); 
+                                          
+                                         //echo "<div class='demo'>";
+                                         
+                                         echo form_hidden('courseno', $courseno);
+                                         echo form_hidden('msg_id', $row->MessageNo);
+                                         $js = 'onclick=" return check()"';
+                                         echo form_submit('delete','Delete',$js);
+                                         //echo "</div>";
+                                         echo form_close();
+                                            
+                                         }
+                                         
                                         $image_properties = array(
                                             'src' => base_url() . 'images/comment.png',
                                             'alt' => 'comment',
@@ -313,7 +325,20 @@ $row_std = $query_student_info->row();
                                         );
 
 
-                                        echo '<span style="">' . nbs(3) . ${'commentof' . $row->MessageNo} . '</span>' . ' ' . anchor('student_home_group/comment/' . $row->MessageNo . '/' . $courseno, " Comments");
+                                        echo '<span style="">' . nbs(3) . ${'commentof' . $row->MessageNo} . '</span>' . ' ' . anchor('student_home_group/comment/' . $row->MessageNo . '/' . $courseno, img($image_properties)." Comments");
+                                        
+                                        /*
+                                        echo form_open('student_home_group/comment'); 
+
+                                        echo "<div class='demo'>";
+
+                                        echo form_hidden('courseno', $courseno);
+                                        echo form_hidden('msg_id', $row->MessageNo);
+                                        //$js = 'onclick=" return check()"';
+                                        echo form_submit('comment',${'commentof' . $row->MessageNo}." Comment");
+                                        echo "</div>";
+                                        echo form_close();
+                                         */
                                         echo "</div>";
                                         //.${'commentof'.$row->MessageNo}." Comment</font> ").'<br>';
                                         echo form_fieldset_close();
@@ -367,21 +392,21 @@ $row_std = $query_student_info->row();
 
                     <?php echo form_hidden('courseno', $courseno); ?>
                     <br /><br />
-
+                    <div class="demo">
                     <input type="button" value="Submit" onclick="checkNull_assign(this.form)" />
-
+                    </div>
                     <?php echo form_close(); ?>
 
                     <hr>
                     <?php
                     $tmpl = array('table_open' => '<table  class="display content_table">');
                     $this->table->set_template($tmpl);
-                    $this->table->set_heading('Topic', 'File Name', 'Date');
+                    $this->table->set_heading('Topic', 'File Name', 'Date','Comment (Click To Enter)');
                     if ($query_task_file != FALSE) {
                         foreach ($query_task_file as $row_record) {
 
                             $this->table->add_row(
-                                    $row_record->topic, $row_record->filename, $row_record->time);
+                                    anchor('student_home_group/download_file/'.$courseno.'/task/'.$row_record->topic.'/'.$row_record->filename, $row_record->topic), $row_record->filename, $row_record->time,anchor('student_home_group/comment/'.$row_record->file_id.'/'.$courseno,${'task_commentof' .$row_record->file_id}));
                         }
                     } 
                     echo $this->table->generate();

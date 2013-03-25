@@ -55,7 +55,16 @@ class Student_home_group extends CI_controller {
         //task file
         $data['query_task_file'] = $this->file->get_task_file($courseno,1);
         $data['task_ex_name'] = $this->exam->get_exam_task($courseno);
+        
+        //comment of task file
+        if ($data['query_task_file'] != FALSE) {
+            foreach ($data['query_task_file'] as $row) {
 
+                $task_id = $row->file_id;
+                $data['task_commentof' . $task_id] = $this->comment->comment_number($courseno, $task_id);
+            }
+            //var_dump($data);
+        }
 
 
         //comment
@@ -107,8 +116,8 @@ class Student_home_group extends CI_controller {
 
         if ($this->uri->segment(3) == 'delete') {
             //echo $this->encrypt->decode(urldecode($this->uri->segment(4)));
-            $msg_id = $this->uri->segment(4);
-            $courseno = $this->uri->segment(5);
+            $msg_id = $this->input->post('msg_id');
+            $courseno = $this->input->post('courseno');
             $this->message->delete($msg_id, $courseno);
             $this->session->set_flashdata('notification', "Message has been deleted successfully");
             redirect('student_home_group/group/' . $courseno);
@@ -208,9 +217,9 @@ class Student_home_group extends CI_controller {
     function comment_delete() {
         $this->load->model('comment');
 
-        $msg_id = $this->uri->segment(3);
-        $courseno = $this->uri->segment(4);
-        $comment_id = $this->uri->segment(5);
+        $msg_id = $this->input->post('msg_id');;
+        $courseno = $this->input->post('courseno');;
+        $comment_id = $this->input->post('comment_id');;
 
         $this->comment->delete($comment_id, $msg_id, $courseno);
         $this->session->set_flashdata('notification', "Comment has been deleted successfully");
@@ -271,8 +280,8 @@ class Student_home_group extends CI_controller {
         $this->load->helper('url');
 
         $courseno = $this->uri->segment(3);
-        $filename = $this->uri->segment(4);
-
+        if($this->uri->segment(5)!=""&&$this->uri->segment(6)!="")$filename = $this->uri->segment(4).'/'.$this->uri->segment(5).'/'.$this->uri->segment(6);
+        else $filename = $this->uri->segment(4);
         $data = file_get_contents("uploads/$courseno/$filename");
         $name = $filename;
 
@@ -282,8 +291,8 @@ class Student_home_group extends CI_controller {
     function delete_file() {
 
         //echo $courseno.'|'.$id.'|'.$filename;
-        $courseno = $this->uri->segment(3);
-        $filename = $this->uri->segment(4);
+        $courseno = $this->input->post('courseno');//$this->uri->segment(3);
+        $filename = $this->input->post('filename');//$this->uri->segment(4);
 
         $this->load->helper('file');
         $this->load->model('file');

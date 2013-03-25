@@ -114,6 +114,14 @@ class Student_home extends CI_controller {
                 $notification_array[$i]['material'] = $row['material'];
                 if ($notification_array[$i]['material'] == 'marks' || $notification_array[$i]['material'] == 'exam')
                     $notification_array[$i]['exam_detail'] = $this->exam->get_exam_name($row['material_id'], $row['material_name']);
+                if ($notification_array[$i]['material'] == 'comment')
+                {
+                    $member_integrity=$this->notification->check_task_file_comment_integrity($row['material_id'],$row['material_name']);
+                    if($member_integrity==FALSE)$notification_array[$i]['hidden']=FALSE;
+                    else if ($member_integrity==$this->session->userdata['ID'])$notification_array[$i]['hidden']=FALSE;
+                    else $notification_array[$i]['hidden']=TRUE;
+                    
+                }
                 $notification_array[$i]['material_id'] = $row['material_id'];
                 $notification_array[$i]['material_name'] = $row['material_name'];
                 $notification_array[$i]['material_detail'] = $row['material_detail'];
@@ -358,7 +366,7 @@ class Student_home extends CI_controller {
         //Pagination
         $config['total_rows'] = $this->notification->get_count_student()->num_rows();
         $config['base_url'] = base_url() . 'index.php/student_home/load_notification';
-        $config['per_page'] = '10';
+        $config['per_page'] = '20';
         $config['uri_segment'] = 3;
         //$config['full_tag_open'] = '<p>';
         //$config['full_tag_close'] = '</p>';
@@ -373,6 +381,14 @@ class Student_home extends CI_controller {
                 $notification_array[$i]['material'] = $row['material'];
                 if ($notification_array[$i]['material'] == 'marks' || $notification_array[$i]['material'] == 'exam')
                     $notification_array[$i]['exam_detail'] = $this->exam->get_exam_name($row['material_id'], $row['material_name']);
+                if ($notification_array[$i]['material'] == 'comment')
+                {
+                    $member_integrity=$this->notification->check_task_file_comment_integrity($row['material_id'],$row['material_name']);
+                    if($member_integrity==FALSE)$notification_array[$i]['hidden']=FALSE;
+                    else if ($member_integrity==$this->session->userdata['ID'])$notification_array[$i]['hidden']=FALSE;
+                    else $notification_array[$i]['hidden']=TRUE;
+                    
+                }
                 $notification_array[$i]['material_id'] = $row['material_id'];
                 $notification_array[$i]['material_name'] = $row['material_name'];
                 $notification_array[$i]['material_detail'] = $row['material_detail'];

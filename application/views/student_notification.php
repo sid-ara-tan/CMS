@@ -59,43 +59,59 @@ $row_std = $query_student_info->row();
                     if ($notification != FALSE) {
 
                         foreach ($notification as $row) {
-                            echo " <li class='comment_even'>";
+                            
                             //echo "<p class='latestnews'>";
                             //echo "<hr>" . $row['material'] . "-" . $row['material_id'] . "-" . $row['material_name'] . "-" . $row['member_name'];
 
                             if ($row['material'] == 'marks') {
+                                echo " <li class='comment_even'>";
                                 echo anchor("student_home_group/group/".$row['material_id'], $row['member_name'] . " Has " . $row['material_extra_info'] . " marks of "
                                         . $row['exam_detail'] . " to " . $row['material_id']);
                                 echo "<br>(" . $row['date'] . ")<br>---------";
+                                echo " </li>";
                             } else if ($row['material'] == 'comment') {
-                                echo anchor("student_home_group/comment/".$row['material_name']."/".$row['material_id'], $row['member_name'] . " Has  commented " . substr($row['material_extra_info'], 0, 15)
+                                if($row['hidden']==FALSE)
+                                {
+                                    echo " <li class='comment_even'>";
+                                    echo anchor("student_home_group/comment/".$row['material_name']."/".$row['material_id'], $row['member_name'] . " Has  commented " . substr($row['material_extra_info'], 0, 15)
                                         . "..... on a post "
                                         . " to " . $row['material_id']);
-                                echo "<br>(" . $row['date'] . ")<br>---------";
+                                    echo "<br>(" . $row['date'] . ")<br>---------";  
+                                    echo " </li>";
+                                }
+
                             } else if ($row['material'] == 'message') {
+                                echo " <li class='comment_even'>";
                                 echo anchor("student_home_group/comment/".$row['material_name']."/".$row['material_id'], $row['member_name'] . " Has  posted about " . substr($row['material_extra_info'], 0, 15)
                                         . "....." . " to " . $row['material_id']);
                                 echo "<br>(" . $row['date'] . ")<br>---------";
+                                echo " </li>";
                             } else if ($row['material'] == 'exam') {
+                                echo " <li class='comment_even'>";
                                 echo anchor("student_home/index/calendar/show/".substr($row['material_extra_info'],8,4)."/".substr($row['material_extra_info'],13,2),
                                             $row['member_name'] . " Has  scheduled exam  "
                                             . $row['exam_detail'] . " of " . $row['material_id']
                                             . " at " . $row['material_extra_info']);
                                 echo "<br>(" . $row['date'] . ")<br>Click To View Exam Calender On HomePage<br>---------";
+                                echo " </li>";
                             } else if ($row['material'] == 'content') {
+                                echo " <li class='comment_even'>";
                                 echo anchor("student_home_group/group/".$row['material_id'], $row['member_name'] . " Has  Uploaded Course Content " . substr($row['material_extra_info'], 0, 15)
                                         . "....." . " to " . $row['material_id']);
                                 echo "<br>(" . $row['date'] . ")<br>---------";
+                                echo " </li>";
                             } else if ($row['material'] == 'file') {
+                                echo " <li class='comment_even'>";
                                 echo anchor("student_home_group/comment/".$row['material_name']."/".$row['material_id'], $row['member_name'] . " Has  Uploaded File " . substr($row['material_extra_info'], 0, 15)
                                         . "....." . " to " . $row['material_id']);
                                 echo "<br>(" . $row['date'] . ")<br>---------";
+                                echo " </li>";
                             }
 
 
 
                             //echo '</p>';
-                            echo " </li>";
+                            
                         }
                         echo $this->pagination->create_links();
                     }

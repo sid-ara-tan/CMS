@@ -70,7 +70,13 @@ $row_std = $query_student_info->row();
                 else
                 {
                     ?>
-                    <h3><?php echo anchor('student_home_group/download_file/'.$this->uri->segment(4).'/'.$row_post->filename, $row_post->topic); ?></h3>
+                    <h3>
+                    <?php 
+                    if($row_post->type==0)echo anchor('student_home_group/download_file/'.$this->uri->segment(4).'/'.$row_post->filename, $row_post->topic); 
+                    else echo anchor('student_home_group/download_file/'.$this->uri->segment(4).'/task/'.$row_post->topic.'/'.$row_post->filename, $row_post->topic);
+                    ?>
+                    </h3>
+                    <b><?php echo $row_post->filename;?></b>
                     <p><?php echo $row_post->description;?></p>
                     <hr>
                     <p><?php echo "by ".$nameof.' at '.$row_post->time;?></p>
@@ -95,6 +101,7 @@ $row_std = $query_student_info->row();
                                     //$row_name_std=$query_student_name->row();
                                     if($row['commentBy']==$this->session->userdata['ID'])
                                     {
+                                        /*
                                             $image_properties = array(
                                             'src' => base_url() . 'images/admin/error.png',
                                             'alt' => 'delete',
@@ -102,7 +109,23 @@ $row_std = $query_student_info->row();
                                             'height' => '15',
                                             'title' => 'delete the post...');
                                         echo '<br>'.anchor('student_home_group/comment_delete/'.$row['msg_no'].'/'.$row['CourseNo'].'/'.$row['id'],img($image_properties),'onclick=" return check()"');
-                                    }?>
+                                    
+                                         */
+                                         echo form_open('student_home_group/comment_delete'); 
+                                          
+                                         echo "<div class='demo'>";
+                                         
+                                         echo form_hidden('courseno',$row['CourseNo']);
+                                         echo form_hidden('msg_id', $row['msg_no']);
+                                         echo form_hidden('comment_id', $row['id']);
+                                         
+                                         $js = 'onclick=" return check()"';
+                                         echo form_submit('delete','Delete',$js);
+                                         echo "</div>";
+                                         echo form_close();   
+                                        
+                                     }?>
+                                         
                             </li>
                         <?php
 

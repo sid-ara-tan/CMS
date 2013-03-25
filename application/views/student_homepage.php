@@ -321,10 +321,15 @@ $row_std = $query_student_info->row();
                                                     . $row['exam_detail'] . " to " . $row['material_id']);
                                             echo "<br>(" . $row['date'] . ")<br>---------";
                                         } else if ($row['material'] == 'comment') {
-                                            echo anchor("student_home_group/comment/".$row['material_name']."/".$row['material_id'], $row['member_name'] . " Has  commented " . substr($row['material_extra_info'], 0, 10)
-                                                    . "..... on a post "
-                                                    . " to " . $row['material_id']);
-                                            echo "<br>(" . $row['date'] . ")<br>---------";
+                                                if($row['hidden']==FALSE)
+                                                {
+                                                    //echo " <li class='comment_even'>";
+                                                    echo anchor("student_home_group/comment/".$row['material_name']."/".$row['material_id'], $row['member_name'] . " Has  commented " . substr($row['material_extra_info'], 0, 15)
+                                                        . "..... on a post "
+                                                        . " to " . $row['material_id']);
+                                                    echo "<br>(" . $row['date'] . ")<br>---------";  
+                                                    //echo " </li>";
+                                                }
                                         } else if ($row['material'] == 'message') {
                                             echo anchor("student_home_group/comment/".$row['material_name']."/".$row['material_id'], $row['member_name'] . " Has  posted about " . substr($row['material_extra_info'], 0, 10)
                                                     . "....." . " to " . $row['material_id']);

@@ -90,6 +90,28 @@ class Notification extends CI_model {
             return FALSE;
     }
 
+    function check_task_file_comment_integrity($courseno,$Id) {
 
+        //$user_id=$this->session->userdata['ID'];
+
+        $query = $this->db->query("
+                SELECT `member_id` 
+                FROM `notification` 
+                WHERE 
+                `material`='file' 
+                AND `material_id`='$courseno'
+                AND `material_name`=$Id
+                AND `material_detail`='task_file'
+            ");
+
+        if ($query->num_rows() > 0)
+        {
+            $row=$query->row();
+            return $row->member_id;
+        }
+            
+        else
+            return FALSE;
+    }
 
 }
