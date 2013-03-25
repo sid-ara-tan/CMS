@@ -349,7 +349,7 @@
           ");
         $query2=$this->db->query("
           Update takencourse set Status='failed'
-          where GPA=0 or GPA is NULL and CourseNo='$courseno'
+          where (GPA=0 or GPA is NULL) and CourseNo='$courseno'
           ");
 
         if($query1 && $query2){

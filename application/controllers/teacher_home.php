@@ -391,7 +391,7 @@ class Teacher_home extends CI_controller{
       $etypename=$this->input->post('exam_type');
       $etype=str_replace(" ","_",$etype);
       $_POST['exam_type']=$etype;
-      $this->form_validation->set_rules('exam_type','Exam Type','callback_exam_type_uniqness['.$courseno.']');
+      $this->form_validation->set_rules('exam_type','Exam Type','alpha_dash|callback_exam_type_uniqness['.$courseno.']');
       if($this->form_validation->run()==false){
           $message=validation_errors();
           $this->session->set_flashdata('addexam_message',$message);

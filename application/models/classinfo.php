@@ -32,19 +32,19 @@ class Classinfo extends CI_Model {
 
     function get_routine_by_period($day,$period) {
         $ID = $this->session->userdata['ID'];
-        /*$query = $this->db->query("
+        $query = $this->db->query("
                 SELECT C.CourseNo,Period,C.Sec,cTime,Location,Duration
                 FROM ClassInfo C,AssignedCourse A
-                WHERE cDay='$day' and T_ID='$ID' and C.CourseNo=A.CourseNo and C.sec=A.sec
-             ");*/
+                WHERE cDay='$day' and Period='$period' and T_ID='$ID' and C.CourseNo=A.CourseNo and C.sec=A.sec
+             ");
         // ei query te prob ase
 
 
-        $query = $this->db->query("
+        /*$query = $this->db->query("
                 SELECT C.CourseNo,Period,C.Sec,cTime,Location,Duration
                 FROM ClassInfo C
                 WHERE cDay='$day' and by_teacher='$ID' and Period='$period'
-             ");
+             ");*/
 
 
              
