@@ -84,5 +84,24 @@ class Comment extends CI_model {
 
 
     }
+    
+    function getall_for_std($courseno,$msg_id,$limit,$offset) {
+        $user_id = $this->session->userdata['ID'];
+        $query = $this->db->query("
+                select *
+                from comment,takencourse
+                where  S_Id='$user_id'
+                AND comment.CourseNo= takencourse.CourseNo
+                AND comment.CourseNo='$courseno' and msg_no='$msg_id'
+                AND comment.status=1
+                AND takencourse.status='Running'
+                order by time asc
+                LIMIT $limit OFFSET $offset");
+
+        if ($query->num_rows() > 0)
+            return $query;
+        else
+            return FALSE;
+    }
 
 }

@@ -53,9 +53,9 @@ class Student_home_group extends CI_controller {
         //message
         $data['querymsg'] = $this->message->getallmessage($courseno, $config['per_page'], $offset);
         //task file
-        $data['query_task_file'] = $this->file->get_task_file($courseno,1);
+        $data['query_task_file'] = $this->file->get_task_file($courseno, 1);
         $data['task_ex_name'] = $this->exam->get_exam_task($courseno);
-        
+
         //comment of task file
         if ($data['query_task_file'] != FALSE) {
             foreach ($data['query_task_file'] as $row) {
@@ -81,16 +81,17 @@ class Student_home_group extends CI_controller {
             //var_dump($data);
         }
 
-        $is_valid_group=0;
+        $is_valid_group = 0;
         foreach ($this->query_taken_course->result_array() as $value) {
             if ($courseno == $value['CourseNo']) {
                 $data['coursename'] = $value['CourseName'];
                 $data['courseno'] = $courseno;
-                $is_valid_group=1;
+                $is_valid_group = 1;
                 $this->load->view('student_group_page', $data);
             }
         }
-        if($is_valid_group==0)echo "You don't have permission to access this page";
+        if ($is_valid_group == 0)
+            echo "You don't have permission to access this page";
     }
 
     function group_message() {
@@ -135,65 +136,130 @@ class Student_home_group extends CI_controller {
         //$data['query_student_name']=$this->db->query("select Name from Student where S_Id='$user_id'");
         $data['taken_course_query'] = $this->query_taken_course;
         $data['notification'] = $this->session->flashdata('notification');
-        ;
-        $offset = $this->uri->segment(5, 0);
+
 
         $data['query_student_info'] = $this->query_student;
+
         $msg_id = $this->uri->segment(3);
         $courseno = $this->uri->segment(4);
+        $offset = $this->uri->segment(5, 0);
+
+        if (is_numeric($offset) && is_numeric($msg_id)) {
+            //Pagination
+            $config['total_rows'] = $this->comment->comment_number($courseno, $msg_id);
+            $config['base_url'] = base_url() . 'index.php/student_home_group/comment/' . $msg_id . '/' . $courseno;
+            $config['per_page'] = '10';
+            $config['uri_segment'] = 5;
+            //$config['full_tag_open'] = '<p>';
+            //$config['full_tag_close'] = '</p>';
+            $this->pagination->initialize($config);
+
+            $data['isfile'] = false;
+            $data['query_post'] = $this->message->get_std($msg_id, $courseno);
 
 
-        //Pagination
-        $config['total_rows'] = $this->comment->comment_number($courseno, $msg_id);
-        $config['base_url'] = base_url() . 'index.php/student_home_group/comment/' . $msg_id . '/' . $courseno;
-        $config['per_page'] = '10';
-        $config['uri_segment'] = 5;
-        //$config['full_tag_open'] = '<p>';
-        //$config['full_tag_close'] = '</p>';
-        $this->pagination->initialize($config);
-
-
-        $data['querycomment'] = $this->comment->getall($courseno, $msg_id, $config['per_page'], $offset);
-
-        if ($data['querycomment'] != FALSE) {
-            foreach ($data['querycomment']->result_array() as $row) {
-
-                $commentno = $row['id'];
-                if ($row['senderType'] == 'student')
-                    $data['nameof' . $commentno] = $this->student->get_name($row['commentBy']);
-                elseif ($row['senderType'] == 'teacher')
-                    $data['nameof' . $commentno] = $this->teacher->get_name($row['commentBy']);
-            }
-            //var_dump($data);
-        }
-
-        $data['isfile'] = false;
-        $data['query_post'] = $this->message->get($msg_id, $courseno);
-
-
-        if ($data['query_post'] == FALSE) {
-            $data['query_post'] = $this->file->get($msg_id, $courseno);
             if ($data['query_post'] == FALSE) {
-                echo "Error!Post May Not Be Available ";
-                die();
+                $query_file = $this->file->get($msg_id, $courseno);
+                if ($query_file == FALSE) {
+                    echo "Error!Post May Not Be Available ";
+                    die();
+                }
+                ///////////
+                $row = $query_file->row();
+                if ($row->type == 1) {
+                    if ($this->file->check_task_file($msg_id, $courseno))
+                    {
+                        $data['query_post'] = $this->file->get_std_task($msg_id, $courseno);
+                        if ($data['query_post'] == FALSE) {
+                            echo "Error!Post May Not Be Valid";
+                            die();
+                        }
+                        $data['querycomment'] = $this->comment->getall($courseno, $msg_id, $config['per_page'], $offset);
+                        //$data['querycomment'] = $this->comment->getall_for_std($courseno, $msg_id, $config['per_page'], $offset);
+
+                        if ($data['querycomment'] != FALSE) {
+                            foreach ($data['querycomment']->result_array() as $row) {
+
+                                $commentno = $row['id'];
+                                if ($row['senderType'] == 'student')
+                                    $data['nameof' . $commentno] = $this->student->get_name($row['commentBy']);
+                                elseif ($row['senderType'] == 'teacher')
+                                    $data['nameof' . $commentno] = $this->teacher->get_name($row['commentBy']);
+                            }
+                            //var_dump($data);
+                        }
+                        //////////
+                        $data['isfile'] = true;
+                        $row = $data['query_post']->row();
+                        if ($row->senderType == 'student')
+                            $data['nameof'] = $this->student->get_name($row->uploader);
+                        elseif ($row->senderType == 'teacher')
+                            $data['nameof'] = $this->teacher->get_name($row->uploader);
+                        $this->load->view('student_group_page_comment', $data);   
+                    } 
+                    else 
+                    {
+                        echo "Error! This Post May Not Be Available to You";
+                        die();
+                    }
+                } else {
+                    $data['query_post'] = $this->file->get_std($msg_id, $courseno);
+                    if ($data['query_post'] == FALSE) {
+                        echo "Error!Post May Be Invalid For You ";
+                        die();
+                    }
+                    $data['querycomment'] = $this->comment->getall($courseno, $msg_id, $config['per_page'], $offset);
+                    //$data['querycomment'] = $this->comment->getall_for_std($courseno, $msg_id, $config['per_page'], $offset);
+
+                    if ($data['querycomment'] != FALSE) {
+                        foreach ($data['querycomment']->result_array() as $row) {
+
+                            $commentno = $row['id'];
+                            if ($row['senderType'] == 'student')
+                                $data['nameof' . $commentno] = $this->student->get_name($row['commentBy']);
+                            elseif ($row['senderType'] == 'teacher')
+                                $data['nameof' . $commentno] = $this->teacher->get_name($row['commentBy']);
+                        }
+                        //var_dump($data);
+                    }
+                    //////////
+                    $data['isfile'] = true;
+                    $row = $data['query_post']->row();
+                    if ($row->senderType == 'student')
+                        $data['nameof'] = $this->student->get_name($row->uploader);
+                    elseif ($row->senderType == 'teacher')
+                        $data['nameof'] = $this->teacher->get_name($row->uploader);
+                    $this->load->view('student_group_page_comment', $data);
+                }
             }
-            $data['isfile'] = true;
-            $row = $data['query_post']->row();
-            if ($row->senderType == 'student')
-                $data['nameof'] = $this->student->get_name($row->uploader);
-            elseif ($row->senderType == 'teacher')
-                $data['nameof'] = $this->teacher->get_name($row->uploader);
-        }
 
-        else {
-            $row = $data['query_post']->row();
-            if ($row->senderType == 'student')
-                $data['nameof'] = $this->student->get_name($row->SenderInfo);
-            elseif ($row->senderType == 'teacher')
-                $data['nameof'] = $this->teacher->get_name($row->SenderInfo);
-        }
+            else {
+                ///////////
+                $data['querycomment'] = $this->comment->getall($courseno, $msg_id, $config['per_page'], $offset);
+                //$data['querycomment'] = $this->comment->getall_for_std($courseno, $msg_id, $config['per_page'], $offset);
 
-        $this->load->view('student_group_page_comment', $data);
+                if ($data['querycomment'] != FALSE) {
+                    foreach ($data['querycomment']->result_array() as $row) {
+
+                        $commentno = $row['id'];
+                        if ($row['senderType'] == 'student')
+                            $data['nameof' . $commentno] = $this->student->get_name($row['commentBy']);
+                        elseif ($row['senderType'] == 'teacher')
+                            $data['nameof' . $commentno] = $this->teacher->get_name($row['commentBy']);
+                    }
+                    //var_dump($data);
+                }
+                //////////
+                $row = $data['query_post']->row();
+                if ($row->senderType == 'student')
+                    $data['nameof'] = $this->student->get_name($row->SenderInfo);
+                elseif ($row->senderType == 'teacher')
+                    $data['nameof'] = $this->teacher->get_name($row->SenderInfo);
+                $this->load->view('student_group_page_comment', $data);
+            }
+        }
+        else
+            echo "Sorry some error has been occured";
     }
 
     function comment_post() {
@@ -217,9 +283,12 @@ class Student_home_group extends CI_controller {
     function comment_delete() {
         $this->load->model('comment');
 
-        $msg_id = $this->input->post('msg_id');;
-        $courseno = $this->input->post('courseno');;
-        $comment_id = $this->input->post('comment_id');;
+        $msg_id = $this->input->post('msg_id');
+        ;
+        $courseno = $this->input->post('courseno');
+        ;
+        $comment_id = $this->input->post('comment_id');
+        ;
 
         $this->comment->delete($comment_id, $msg_id, $courseno);
         $this->session->set_flashdata('notification', "Comment has been deleted successfully");
@@ -244,14 +313,12 @@ class Student_home_group extends CI_controller {
         $this->load->library('upload', $config);
 
         //create folder
-        if(!is_dir('./uploads/' . $courseno))
-        {
-        mkdir('./uploads/' . $courseno,0777);
+        if (!is_dir('./uploads/' . $courseno)) {
+            mkdir('./uploads/' . $courseno, 0777);
         }
-        
-        if(!is_dir( './uploads/' . $courseno.'/task'))
-        {
-        mkdir( './uploads/' . $courseno.'/task',0777);
+
+        if (!is_dir('./uploads/' . $courseno . '/task')) {
+            mkdir('./uploads/' . $courseno . '/task', 0777);
         }
 
 
@@ -280,8 +347,10 @@ class Student_home_group extends CI_controller {
         $this->load->helper('url');
 
         $courseno = $this->uri->segment(3);
-        if($this->uri->segment(5)!=""&&$this->uri->segment(6)!="")$filename = $this->uri->segment(4).'/'.$this->uri->segment(5).'/'.$this->uri->segment(6);
-        else $filename = $this->uri->segment(4);
+        if ($this->uri->segment(5) != "" && $this->uri->segment(6) != "")
+            $filename = $this->uri->segment(4) . '/' . $this->uri->segment(5) . '/' . $this->uri->segment(6);
+        else
+            $filename = $this->uri->segment(4);
         $data = file_get_contents("uploads/$courseno/$filename");
         $name = $filename;
 
@@ -291,8 +360,8 @@ class Student_home_group extends CI_controller {
     function delete_file() {
 
         //echo $courseno.'|'.$id.'|'.$filename;
-        $courseno = $this->input->post('courseno');//$this->uri->segment(3);
-        $filename = $this->input->post('filename');//$this->uri->segment(4);
+        $courseno = $this->input->post('courseno'); //$this->uri->segment(3);
+        $filename = $this->input->post('filename'); //$this->uri->segment(4);
 
         $this->load->helper('file');
         $this->load->model('file');
@@ -439,10 +508,8 @@ class Student_home_group extends CI_controller {
             //echo "hello in";
         }
     }
-    
-    
-    function submit_task()
-    {
+
+    function submit_task() {
         // $author=$this->session->userdata['ID'];
         $this->load->library('form_validation');
         $this->form_validation->set_rules('topic', 'Topic', 'trim|required|max_length[50]|xss_clean'); //is_unique[users.username]
@@ -451,10 +518,10 @@ class Student_home_group extends CI_controller {
         $this->security->sanitize_filename($this->input->post('file_upload'));
 
         $topic = nl2br(strip_quotes($this->input->post('topic')));
-       // $description = nl2br(strip_quotes($this->input->post('description')));
+        // $description = nl2br(strip_quotes($this->input->post('description')));
         $courseno = $this->input->post('courseno');
         //var_dump($courseno);
-        $config['upload_path'] = './uploads/' . $courseno.'/task/'.$topic;
+        $config['upload_path'] = './uploads/' . $courseno . '/task/' . $topic;
         $config['remove_spaces'] = TRUE;
         $config['allowed_types'] = '*';
         $this->load->library('upload', $config);
@@ -474,7 +541,7 @@ class Student_home_group extends CI_controller {
             $file_info = $this->upload->data();
             //$file_notification='File:'.$file_info['file_name'].' is successfully Uploaded';
             $this->load->model('file');
-            $this->file->insert_file($courseno, $topic, "", $file_info['file_name'], 1,1);
+            $this->file->insert_file($courseno, $topic, "", $file_info['file_name'], 1, 1);
             $this->session->set_flashdata('notification_task', "File : " . $file_info['file_name'] . " has been uploaded successfully");
             // $this->session->keep_flashdata('notification_file');
             redirect('student_home_group/group/' . $courseno);

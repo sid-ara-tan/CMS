@@ -154,5 +154,25 @@ class Message extends CI_model {
             return FALSE;
         }
     }
+    
+    function get_std($msg_id,$courseno)
+    {
+        $user_id = $this->session->userdata['ID'];
+        $query = $this->db->query("
+                select *
+                from message_group_student,takencourse
+                where  S_Id='$user_id'
+                AND message_group_student.CourseNo= takencourse.CourseNo
+                AND message_group_student.CourseNo='$courseno' and MessageNo='$msg_id'
+                AND message_group_student.status=1
+                AND takencourse.status='Running'
+                ");
+        
+
+        if ($query->num_rows() > 0)
+            return $query;
+        else
+            return FALSE;
+    }
 
 }

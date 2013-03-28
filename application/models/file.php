@@ -100,7 +100,7 @@ class File extends CI_model {
         return $query->num_rows();
     }
 
-    function get_task_file($courseno,$type) {
+    function get_task_file($courseno, $type) {
         $user_id = $this->session->userdata['ID'];
         $query = $this->db->query("
                 SELECT * FROM file
@@ -119,7 +119,7 @@ class File extends CI_model {
             return FALSE;
         }
     }
-    
+
     function get_file_all_std($courseno) {
         $query = $this->db->query("
                 SELECT * FROM file
@@ -136,7 +136,8 @@ class File extends CI_model {
             return FALSE;
         }
     }
-       function get_file_all_teach($courseno, $limit, $offset) {
+
+    function get_file_all_teach($courseno, $limit, $offset) {
         $query = $this->db->query("
                 SELECT * FROM file
                 WHERE CourseNo='$courseno'
@@ -149,6 +150,64 @@ class File extends CI_model {
                 $data[] = $row;
             }
             return $data;
+        } else {
+            return FALSE;
+        }
+    }
+
+    function get_std($msg_id, $courseno) {
+        $user_id = $this->session->userdata['ID'];
+        $query = $this->db->query("
+                select *
+                from file,takencourse
+                where  S_Id='$user_id'
+                AND file.CourseNo= takencourse.CourseNo
+                AND file.CourseNo='$courseno' and file_id='$msg_id'
+                AND file.status=1
+                AND file.type=0
+                AND takencourse.status='Running'
+                ");
+
+
+        if ($query->num_rows() > 0)
+            return $query;
+        else
+            return FALSE;
+    }
+
+    function get_std_task($msg_id, $courseno) {
+        $user_id = $this->session->userdata['ID'];
+        $query = $this->db->query("
+                select *
+                from file,takencourse
+                where  S_Id='$user_id'
+                AND file.CourseNo= takencourse.CourseNo
+                AND file.CourseNo='$courseno' and file_id='$msg_id'
+                AND file.status=1
+                AND file.type=1
+                AND takencourse.status='Running'
+                ");
+
+
+        if ($query->num_rows() > 0)
+            return $query;
+        else
+            return FALSE;
+    }
+
+    function check_task_file($msg_id, $courseno) {
+        $user_id = $this->session->userdata['ID'];
+        $query = $this->db->query("
+                SELECT * 
+                FROM file
+                WHERE CourseNo='$courseno'
+                AND file_id=$msg_id
+                AND uploader='$user_id'
+                AND status=1
+                AND type=1
+                ");
+        if ($query->num_rows() > 0) {
+            return TRUE;
         } else {
             return FALSE;
         }

@@ -121,7 +121,7 @@ $row_std = $query_student_info->row();
                     <br>
                     <input type="text" name="std_name" size="50" maxlength="50" value="<?php echo $row_std->Name; ?>" />
                     <p id="name_error"></p>
-                    <div style="color:red;"><?php echo form_error('std_name'); ?></div>
+                    <div><?php echo form_error('std_name','<font color="red">', '</font><br />');?></div>
                 </div>
                 <br>
                 <div>

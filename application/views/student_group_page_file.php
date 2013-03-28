@@ -82,7 +82,7 @@ $(function() {
                                             'height' => '20',
                                             'title' => 'comment here....'
                                          );
-                                echo '<span style="font-size:16px;">'.nbs(3).${'commentoffile'.$row_record_file->file_id}.'</span> '.anchor('student_home_group/comment/'.$row_record_file->file_id.'/'.$courseno," Comments");
+                                echo '<span style="font-size:16px;">'.nbs(3).${'commentoffile'.$row_record_file->file_id}.'</span> '.anchor('student_home_group/comment/'.$row_record_file->file_id.'/'.$courseno,img($image_properties)." Comments");
                                         //${'commentoffile'.$row_record_file->file_id}.'<br>';
                                 echo '<div>';
                                 echo form_fieldset_close();
