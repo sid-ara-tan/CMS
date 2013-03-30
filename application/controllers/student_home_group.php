@@ -91,7 +91,8 @@ class Student_home_group extends CI_controller {
             }
         }
         if ($is_valid_group == 0)
-            echo "You don't have permission to access this page";
+            //echo "You don't have permission to access this page";
+            redirect('error/invalid');
     }
 
     function group_message() {
@@ -161,8 +162,10 @@ class Student_home_group extends CI_controller {
             if ($data['query_post'] == FALSE) {
                 $query_file = $this->file->get($msg_id, $courseno);
                 if ($query_file == FALSE) {
-                    echo "Error!Post May Not Be Available ";
-                    die();
+                    //$data_error['error_notification']="Error!Post May Not Be Available ";
+                    //$this->load->view('error', $data_error); 
+                    //die();
+                    redirect('error');
                 }
                 ///////////
                 $row = $query_file->row();
@@ -171,8 +174,10 @@ class Student_home_group extends CI_controller {
                     {
                         $data['query_post'] = $this->file->get_std_task($msg_id, $courseno);
                         if ($data['query_post'] == FALSE) {
-                            echo "Error!Post May Not Be Valid";
-                            die();
+                            //$data_error['error_notification']="Error!Post May Be Invalid ";
+                            //$this->load->view('error', $data_error); 
+                            //die();
+                            redirect('error');
                         }
                         $data['querycomment'] = $this->comment->getall($courseno, $msg_id, $config['per_page'], $offset);
                         //$data['querycomment'] = $this->comment->getall_for_std($courseno, $msg_id, $config['per_page'], $offset);
@@ -199,14 +204,18 @@ class Student_home_group extends CI_controller {
                     } 
                     else 
                     {
-                        echo "Error! This Post May Not Be Available to You";
-                        die();
+                        //$data_error['error_notification']="Error!Post May Not Be Available To You ";
+                        //$this->load->view('error', $data_error); 
+                        //die();
+                        redirect('error');
                     }
                 } else {
                     $data['query_post'] = $this->file->get_std($msg_id, $courseno);
                     if ($data['query_post'] == FALSE) {
-                        echo "Error!Post May Be Invalid For You ";
-                        die();
+                        //$data_error['error_notification']="Error!Post May Not Be Available ";
+                       // $this->load->view('error', $data_error); 
+                       // die();
+                        redirect('error');
                     }
                     $data['querycomment'] = $this->comment->getall($courseno, $msg_id, $config['per_page'], $offset);
                     //$data['querycomment'] = $this->comment->getall_for_std($courseno, $msg_id, $config['per_page'], $offset);
@@ -259,7 +268,7 @@ class Student_home_group extends CI_controller {
             }
         }
         else
-            echo "Sorry some error has been occured";
+            redirect('error/invalid');
     }
 
     function comment_post() {

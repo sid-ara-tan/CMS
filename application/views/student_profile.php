@@ -6,7 +6,19 @@ $this->load->view('header/three_header', $data);
 <?php
 $row_std = $query_student_info->row();
 ?>
-
+<style>
+.sid_error {
+display: block;
+width: 92%;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+background-position: 10px 10px;
+border: 1px solid rgb(221,30,16);
+background-color: rgb(255,235,232);
+padding: 10px;
+}
+</style>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#p_change").click(function(){
@@ -73,7 +85,7 @@ $row_std = $query_student_info->row();
 
     <div class="wrapper row4">
         <div id="container" class="clear">
-            <p><font color="red"><?php echo $notification; ?></font><p>
+            <?php if($notification!=""){?><div id="error_message" class="sid_error"><?php echo $notification; ?></div><br><?php }?>
                 <!-- ####################################################################################################### -->
             <div id="left_column">
                 <div class="holder">
