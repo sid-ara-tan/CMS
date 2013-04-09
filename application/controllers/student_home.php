@@ -83,8 +83,9 @@ class Student_home extends CI_controller {
 
         if ($this->uri->segment(5) == '' || $this->uri->segment(6) == '')
             $exam_query = $this->exam->get_all_list($current_month, $current_year);
-        else
+        else if (is_numeric ($this->uri->segment(5))&&is_numeric ($this->uri->segment(6)))
             $exam_query = $this->exam->get_all_list($this->uri->segment(6), $this->uri->segment(5));
+        else            redirect ('error/invalid');
 
         //var_dump($exam_query);
         $this->load->library('calendar', $this->prefs_calender);

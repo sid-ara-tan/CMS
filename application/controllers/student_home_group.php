@@ -29,6 +29,8 @@ class Student_home_group extends CI_controller {
         $data['notification_task'] = $this->session->flashdata('notification_task');
 
         $offset = $this->uri->segment(4, 0);
+        if(!is_numeric($offset))redirect ('error/invalid');
+        
         $this->load->model('message');
         $this->load->model('comment');
         $this->load->model('student');
